@@ -12,7 +12,7 @@ public abstract class CookiesController {
 
 	protected Cookie[] readOrCreateCookie(HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
-		if (cookies==null)
+		if (cookies==null || cookies.length<= 1)
 			return createCookie(response);
 		Cookie cookie = findCookie(cookies);
 		
@@ -32,7 +32,7 @@ public abstract class CookiesController {
 				return cookie;
 		return null;
 	}
-
+	//Me estoy cargando la cookie de JSESSIONID
 	private Cookie[] createCookie(HttpServletResponse response) {
 		Cookie[] cookies = new Cookie[2];
 		Cookie cookie = new Cookie(COOKIE_NAME, UUID.randomUUID().toString());
