@@ -90,14 +90,12 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 			$.ajax(data);		}
 
 		connected() {
-			accUtils.announce('Login page loaded.');
-			document.title = "Login";
-			let self=this;
-			
-			let divGoogle = document.createElement("div");
-			divGoogle.setAttribute("id", "my-signin2");
-			document.getElementById("zonaGoogle").appendChild(divGoogle);
-			
+			accUtils.announce('Login page loaded.')
+			document.title = "Login"
+			let self = this
+			let divGoogle = document.createElement("div")
+			divGoogle.setAttribute("id", "my-signin2")
+			document.getElementById("zonaGoogle").appendChild(divGoogle)
 			gapi.signin2.render('my-signin2', {
 		        'scope': 'profile email',
 		        'width':150,
@@ -105,11 +103,11 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		        'longtitle': false,
 		        'theme': 'dark',
 		        'onsuccess': function(googleUser) {
-					self.login(googleUser);
+	        		self.login(googleUser);
 				},
 		        'onfailure': function(error) {
-		        	alert(error.responseJSON.message);
-		        	console.log(error.responseJSON.message);
+		        	alert(error);
+		        	console.log(error);
 		        }
 		      });
 		};
