@@ -88,12 +88,13 @@ public class UserController extends CookiesController {
 		String name = jso.getString("name");
 		String pwd = jso.getString("pwd");
 		String ip = request.getRemoteAddr();
-		
 		User user = userService.doLogin(name, pwd, ip);
-		
 		Cookie[] cookies = readOrCreateCookie(request, response);
+		for(int i=0;cookies!=null&&i<cookies.length;i++) {
 		Cookie cookie = findCookie(cookies);
-		user.setCookie(cookie.getValue());
+		if(cookie.getValue()!=null)
+			user.setCookie(cookie.getValue());
+		}
 		userDAO.save(user);
 		userService.insertLogin(user, ip, cookies[0]);
 		request.getSession().setAttribute("userId", user.getId());
