@@ -4,6 +4,7 @@
       <oj-module config="[[headerConfig]]"></oj-module>
     </header>
   </div>
+  
   <div class="oj-applayout-content">
     <div role="main" class="oj-hybrid-applayout-content">
       <div class="oj-hybrid-padding">
@@ -19,6 +20,30 @@
         </div>
 
         <ol>
+        
+		<style>
+		.header {
+		  display: flex;
+		  
+		}
+		
+		.tab_loc {
+		  float: left;
+		}
+		
+		.tab_op {
+		  margin-right: 200px;
+		  float: right;
+		}
+		
+		.resultado{
+		  margin-top: 50px;
+		  text-align: center;
+		  justify-content: center;
+		}
+		</style>
+        
+        
           <!-- ko foreach : matches -->
           	<!-- ko with : response -->
             <li>
@@ -43,8 +68,9 @@
               </div>
             <!-- /ko -->  
             
-              <div>Tablero local:
-              	<table width="300px" height="300px" border="1px solid black" border-collapse="collapse">
+            <div>
+              <div class="tab_loc">Tablero local:
+              	<table width="300px" height="300px" border="5px solid black" border-collapse="collapse">
               		<!-- ko if : nombre=="Barcos" -->
               			<!-- ko with : boardLocal -->
               				
@@ -61,19 +87,44 @@
 	              	<!-- /ko -->
 	             </table>
               </div>
+              
+              <div class="tab_op">Tablero del oponente:
+              	<table width="300px" height="300px" border="1px solid black" border-collapse="collapse">
+              		<!-- ko if : nombre=="tOponente" -->
+              			<!-- ko with : boardLocal -->
+              				
+              					<!-- ko foreach : squares -->
+              						<tr>
+              						    <!-- ko foreach : $data -->
+              								<td>
+              									<span data-bind="html : $data"></span>
+              								</td>
+              							<!-- /ko -->
+              						</tr>
+              					<!-- /ko -->
+	              		<!-- /ko -->
+	              	<!-- /ko -->
+	             </table>
+              </div>
+              </div>
 
-				<!-- ko with : response -->
-	              <div>Ganador: <span data-bind="html : winner"></span></div>
-	              <div>Perdedor: <span data-bind="html : looser"></span></div>
+			  <div class="resultado">
+			  	<!-- ko with : response -->
+              	<div>Ganador: <span data-bind="html : winner"></span></div>
+              	<div>Perdedor: <span data-bind="html : looser"></span></div>
+              	<div>Acabó en empate: <span data-bind="html : draw"></span></div>
+              	
+              	<!-- /ko -->
+              	<p></p>
+              	<input data-bind="value : $parent.x" type="number" size="1" placeholder="X">
+                <input data-bind="value : $parent.y" type="number" size="1" placeholder="Y">
+                <button data-bind="click : function() { $parent.mover($data); }">Mover</button>
+                <br>
+                <button data-bind="click : function() { $parent.reload($data); }">Recargar partida</button>
+              </div>
+  
 	
-	              <div>Acabó en empate: <span data-bind="html : draw"></span></div>
-	            <!-- /ko -->  
-	
-	              <input data-bind="value : $parent.x" type="number" size="1" placeholder="X">
-	              <input data-bind="value : $parent.y" type="number" size="1" placeholder="Y">
-	              <button data-bind="click : function() { $parent.mover($data); }">Mover</button>
-	              <br>
-	              <button data-bind="click : function() { $parent.reload($data); }">Recargar partida</button>
+	              
             </li>
           <!-- /ko -->
         </ol>
