@@ -94,7 +94,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		}
 
 		conectarAWebSocket() {
-			let ws = new WebSocket("ws://localhost/wsGenerico");
+			let ws = new WebSocket("ws://localhost:8080/wsGenerico");
 			ws.onopen = function(event) {
 				alert("Conexión establecida");
 			}

@@ -34,7 +34,7 @@ public class User {
 	private String email;
 	@NotBlank(message = "El nombre de usuario no puede estar vacío")
 	private String name;
-	@NotBlank(message = "La contraseña no puede estar vacía")
+	//@NotBlank(message = "La contraseña no puede estar vacía")
 	private String pwd;
 	private String picture;
 	private Long confirmationDate;
