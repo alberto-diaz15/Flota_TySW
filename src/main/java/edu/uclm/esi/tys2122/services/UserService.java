@@ -47,8 +47,16 @@ public class UserService {
 		this.connectedUsers.put(user.getId(), user);
 		return user;
 	}
+	public User doLoginGoogle(String userId) {		
+		Optional<User> user = userRepo.findById(userId);
+		if (user.isEmpty()) //  || user.getConfirmationDate()==null)
+			return null;
+		
+		this.connectedUsers.put(user.get().getId(), user.get());
+		return user.get();
+	}
 	
-	/*public User doRestore(String name, String email, String ip) throws NoSuchAlgorithmException {
+	public User doRestore(String name, String email, String ip) throws NoSuchAlgorithmException {
 		//pwd = org.apache.commons.codec.digest.DigestUtils.sha512Hex(pwd);
 		
 		User user = userRepo.findByEmail(email);
@@ -57,7 +65,7 @@ public class UserService {
 		
 		this.connectedUsers.put(user.getId(), user);
 		return user;
-	}*/
+	}
 
 	public void save(User user) {
 		userRepo.save(user);

@@ -74,11 +74,10 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		}
 		
 		actualizarTablero(x,y){
-			//Preguntar  si es mejor en vez de actualizar la tabla con html, usar el board
-			//Preguntar como usar los squares para combinarlos con el tablero
-			// Tambien averiguar qué usuario tiene el turno para poner una X o una O en las Tres en raya
-			// Preguntar tambien si creo el tablero de forma optima
-			//duda para añadir mas .js para vincular unos a otros sin ponerlo explicitamente en el html
+			//Preguntar si en barcosMatch puedo quitar el boardLocal ya que no necesito que los board viajen,
+			//aunque quizas en el momento de crear el board si que tiene que ir en la response, en ese caso,
+			//tengo que crear 2 tableros, uno para cada usuario, y luego 2 tableros vacios, esos vacíos, donde los creo
+			//Preguntar tambien, el error en el register cuando no meto ninguna pwd, ni la 1 ni la 2
 			var tablero = document.getElementById("idTabla");
 			var celdas = tablero.getElementsByTagName("td");
 			var i;

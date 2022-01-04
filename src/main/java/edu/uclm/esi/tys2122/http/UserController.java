@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class UserController extends CookiesController {
 		String googleId = jso.getString("googleId");
 		String ip = request.getRemoteAddr();
 
-		User user = userService.findUser(googleId);
+		User user = userService.doLoginGoogle(googleId);
 		if(user != null) {
 			Cookie[] cookies = readOrCreateCookie(request, response);
 			Cookie cookie = findCookie(cookies);
@@ -80,7 +81,13 @@ public class UserController extends CookiesController {
 			request.getSession().setAttribute("userId", user.getId());
 		}else {
 			registerGoogle(credenciales);
-			//repasar porq estos credenciales no tienen password comprobar que funciona
+			user = userService.doLoginGoogle(googleId);
+			Cookie[] cookies = readOrCreateCookie(request, response);
+			Cookie cookie = findCookie(cookies);
+			user.setCookie(cookie.getValue());
+			userDAO.save(user);
+			userService.insertLogin(user, ip, cookies[0]);
+			request.getSession().setAttribute("userId", user.getId());
 		}
 	}
 
@@ -100,6 +107,23 @@ public class UserController extends CookiesController {
 		request.getSession().setAttribute("userId", user.getId());
 	}
 
+	@PostMapping(value = "/restorePwd")	
+	public void restorePwd(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
+		JSONObject jso = new JSONObject(credenciales);
+		String userName = jso.optString("name");
+		Optional<User> optUser = userDAO.findByName(userName);
+		if(optUser.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: usuario no encontrado");
+		}
+		User user = optUser.get(); 
+		String ip = request.getRemoteAddr();
+		/*Email smtp=new Email();
+		smtp.send(user.getEmail(), "Bienvenido al sistema", 
+			"Para confirmar, pulse aquí: " +
+			"http://localhost/user/validateAccount/" + token.getId());*/
+		//Me falta lo de mandar correos y mierdas
+		userService.doRestore(userName, user.getEmail(), ip);
+	}
 	@PutMapping("/register")
 	@ResponseBody
 	public String register(@RequestBody Map<String, Object> credenciales) {
@@ -108,7 +132,10 @@ public class UserController extends CookiesController {
 		String email = jso.optString("email");
 		String pwd1 = jso.optString("pwd1");
 		String pwd2 = jso.optString("pwd2");
-		String picture = jso.optString("picture");		
+		String picture = jso.optString("picture");
+		if(pwd1.isEmpty() || pwd2.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: inserte una contraseña");
+		}
 		if (!pwd1.equals(pwd2))
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: the passwords do not match");
 		if (pwd1.length()<4)
