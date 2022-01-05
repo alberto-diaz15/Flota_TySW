@@ -5,9 +5,11 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		constructor() {
 			var self = this;
 			
-			self.email = ko.observable("pepe@pepe.com");
-			self.pwd1 = ko.observable("pepe123");
-			self.pwd2 = ko.observable("pepe123");
+			self.email = ko.observable("pepitopruebasadc@gmail.com");
+			self.pwd1 = ko.observable("");
+			self.pwd2 = ko.observable("");
+			self.token = ko.observable();
+
 			
 			self.message = ko.observable();
 			self.error = ko.observable();
@@ -32,7 +34,8 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 			var info = {
 				email : this.email(),
 				pwd1 : self.pwd1(),
-				pwd2 : self.pwd2()
+				pwd2 : self.pwd2(),
+				token : self.token()
 			};
 			var data = {
 				data : JSON.stringify(info),

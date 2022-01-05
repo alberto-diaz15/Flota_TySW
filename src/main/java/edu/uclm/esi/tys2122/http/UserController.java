@@ -25,7 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import edu.uclm.esi.tys2122.dao.TokenRepository;
 import edu.uclm.esi.tys2122.dao.UserRepository;
+import edu.uclm.esi.tys2122.model.Email;
+import edu.uclm.esi.tys2122.model.Token;
 import edu.uclm.esi.tys2122.model.User;
 import edu.uclm.esi.tys2122.services.UserService;
 
@@ -38,6 +41,9 @@ public class UserController extends CookiesController {
 	
 	@Autowired
 	private UserRepository userDAO;
+	
+	@Autowired
+	private TokenRepository tokenRepo;
 	
 	@GetMapping("/heLlegado")
 	public String heLlegado(HttpServletRequest request, HttpServletResponse response) {
@@ -107,8 +113,8 @@ public class UserController extends CookiesController {
 		request.getSession().setAttribute("userId", user.getId());
 	}
 
-	@PostMapping(value = "/restorePwd")	
-	public void restorePwd(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
+	@PostMapping(value = "/sendRestorePwd")	
+	public void sendRestorePwd(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
 		JSONObject jso = new JSONObject(credenciales);
 		String userName = jso.optString("name");
 		Optional<User> optUser = userDAO.findByName(userName);
@@ -117,12 +123,40 @@ public class UserController extends CookiesController {
 		}
 		User user = optUser.get(); 
 		String ip = request.getRemoteAddr();
-		/*Email smtp=new Email();
-		smtp.send(user.getEmail(), "Bienvenido al sistema", 
-			"Para confirmar, pulse aquí: " +
-			"http://localhost/user/validateAccount/" + token.getId());*/
-		//Me falta lo de mandar correos y mierdas
-		userService.doRestore(userName, user.getEmail(), ip);
+		Token token = new Token(user.getEmail());
+		tokenRepo.save(token);
+		Email smtp=new Email();
+		smtp.sendRestore(user.getEmail(),token.getId()); 
+		//Comprobando que metodo usar para asegurarme que es el usuario el que pide recuperar contraseña, dudo si usar la IP o el token
+		//userService.doRestore(userName, user.getEmail(), ip);
+	}
+	
+	@PostMapping(value = "/restorePwd")	
+	public void restorePwd(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
+		JSONObject jso = new JSONObject(credenciales);
+		String email = jso.optString("email");
+		String pwd1 = jso.optString("pwd1");
+		String pwd2 = jso.optString("pwd2");
+		String idToken = jso.optString("token");
+		User user = userDAO.findByEmail(email);
+		if(user == null) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: usuario no encontrado");
+		}
+		
+		if(pwd1.isEmpty() || pwd2.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: inserte una contraseña");
+		}
+		if (!pwd1.equals(pwd2))
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: the passwords do not match");
+		if (pwd1.length()<4)
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Error: la contraseña debe tener al menos cuatro caracteres");
+		
+		String ip = request.getRemoteAddr();
+		userService.validateToken(idToken);
+
+		user.setPwd(org.apache.commons.codec.digest.DigestUtils.sha512Hex(pwd1));
+		userService.save(user);
+		//userService.doRestore(userName, user.getEmail(), ip);
 	}
 	@PutMapping("/register")
 	@ResponseBody

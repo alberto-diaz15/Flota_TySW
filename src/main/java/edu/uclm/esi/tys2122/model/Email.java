@@ -58,10 +58,10 @@ public class Email {
 		String smtpHost= "smtp.gmail.com";
 		String startTTLS="true";
 		String port="587";
-		String sender="tysweb2122@gmail.com";		// REMITENTE
-		String serverUser="tysweb2122@gmail.com";	// USUARIO
+		String sender="pepitopruebasadc@gmail.com";		// REMITENTE
+		String serverUser="pepitopruebasadc@gmail.com";	// USUARIO
 		String userAutentication= "true";
-		String pwd="EscuelaSITysweb";				// PONER LA CONTRASEÑA
+		String pwd="1234abcd_A";				// PONER LA CONTRASEÑA
 		String fallback="true";	
 		
 		properties.put("mail.smtp.host", smtpHost);  
@@ -83,7 +83,9 @@ public class Email {
 		        MimeMessage msg = new MimeMessage(session);
 		        try {
 		        	
-		        	String html = "Test\n" + "\nHaga click en el enlace para recuperar la contraseña" + "\n<a href='https://localhost/?ojr=restorePassword'>Recuperar contraseña</a>";
+		        	String html = "Test\n" + "\n Cuando haga click en el siguiente enlace, necesitará "
+		        			+ "el siguiente codigo:\n"+token+"\nHaga click en el enlace para recuperar la contraseña"
+		        			+ "\n<a href='http://localhost:8080/?ojr=restorePassword'>Recuperar contraseña</a>";
 			        msg.setSubject("Recuperar contraseña Tysweb");
 			        msg.setText(html, "UTF-8", "html"); 
 			        msg.setFrom(new InternetAddress(sender));

@@ -73,11 +73,11 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		restore() {
 			var self = this;
 			var info = {
-				name : this.name()
+				name : this.userName()
 			};
 			var data = {
 				data : JSON.stringify(info),
-				url : "user/restorePwd",
+				url : "user/sendRestorePwd",
 				type : "post",
 				contentType : 'application/json',
 				success : function(response) {

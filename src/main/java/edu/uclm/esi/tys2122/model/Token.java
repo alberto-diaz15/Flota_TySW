@@ -5,8 +5,14 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @Entity
+@Table(indexes = {
+	@Index(unique = true, columnList = "id"),
+	@Index(unique = true, columnList = "email"),
+})
 public class Token {
 	@Id
 	@Column(length = 36)

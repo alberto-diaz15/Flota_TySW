@@ -78,6 +78,8 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 			//aunque quizas en el momento de crear el board si que tiene que ir en la response, en ese caso,
 			//tengo que crear 2 tableros, uno para cada usuario, y luego 2 tableros vacios, esos vacíos, donde los creo
 			//Preguntar tambien, el error en el register cuando no meto ninguna pwd, ni la 1 ni la 2
+			// como usar el validateAccount del userController
+			// Como usar la date de un Token
 			var tablero = document.getElementById("idTabla");
 			var celdas = tablero.getElementsByTagName("td");
 			var i;
