@@ -19,6 +19,7 @@ public class SinkTheFleetMatch extends Match {
 		return new SinkTheFleetBoard();
 	}
 	
+	@Override
 	protected Board newOponentBoard() {
 		return new SinkTheFleetBoard();
 	}

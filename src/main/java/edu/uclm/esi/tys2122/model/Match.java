@@ -37,6 +37,7 @@ public abstract class Match {
 		this.id = UUID.randomUUID().toString();
 		this.players = new Vector<>();
 		this.board = newBoard();
+		this.boardOponente = newOponentBoard();
 	}
 
 	public String getId() {
@@ -51,6 +52,9 @@ public abstract class Match {
 		return board;
 	}
 	
+	public Board getOponentBoard() {
+		return boardOponente;
+	}
 	public void setBoard(Board board) {
 		this.board = board;
 	}
