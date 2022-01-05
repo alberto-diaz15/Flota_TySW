@@ -55,9 +55,10 @@ public class SinkTheFleetMatch extends Match {
 		if (this.getSquare(x, y)!=0)
 			throw new Exception("Casilla ocupada");
 		
-		int value = this.getPlayerWithTurn()==this.getPlayers().get(0) ? 1 : 2;
+		//int value = this.getPlayerWithTurn()==this.getPlayers().get(0) ? 1 : 2;
+		int value = 1;
 		this.setSquare(x, y, value);
-		
+		checkHit(x,y);
 		checkWinner();
 		
 		if (this.filled() && this.winner==null)
@@ -77,7 +78,10 @@ public class SinkTheFleetMatch extends Match {
 					return false;
 		return true;
 	}
-	
+	private void checkHit(int x, int y) {
+		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
+		int[][] squares = board.getSquares();
+	}
 	private void checkWinner() {
 		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
 		int[][] squares = board.getSquares();
