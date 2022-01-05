@@ -21,6 +21,11 @@ public class ChessMatch extends Match {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	protected Board newOponentBoard() {
+		return null;
+	}
 
 	@Override
 	protected void checkReady() {

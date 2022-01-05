@@ -22,6 +22,9 @@ public abstract class Match {
 	private Board board;
 	
 	@Transient
+	private Board boardOponente;
+	
+	@Transient
 	protected Vector<User> players;
 	
 	@Transient
@@ -74,6 +77,8 @@ public abstract class Match {
 	protected abstract void checkReady();
 
 	protected abstract Board newBoard();
+	
+	protected abstract Board newOponentBoard();
 
 	public abstract void move(String userId, JSONObject jso) throws Exception;
 

@@ -18,6 +18,11 @@ public class TictactoeMatch extends Match {
 	protected Board newBoard() {
 		return new TictactoeBoard();
 	}
+	
+	@Override
+	protected Board newOponentBoard() {
+		return null;
+	}
 
 	@Override
 	protected void checkReady() {
@@ -122,4 +127,6 @@ public class TictactoeMatch extends Match {
 				}
 		}		
 	}
+
+
 }

@@ -19,6 +19,10 @@ public class SinkTheFleetMatch extends Match {
 		return new SinkTheFleetBoard();
 	}
 	
+	protected Board newOponentBoard() {
+		return new SinkTheFleetBoard();
+	}
+	
 	@Override
 	protected void checkReady() {
 		this.ready = this.players.size()==2;
