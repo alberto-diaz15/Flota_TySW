@@ -76,6 +76,7 @@ public class GamesController extends CookiesController {
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
 		}
+		gamesService.put(match);
 		return match;
 	}
 	

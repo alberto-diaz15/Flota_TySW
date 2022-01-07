@@ -57,8 +57,7 @@ public class ChessMatch extends Match {
 	}
 
 	@Override
-	public void colocarPiezas() {
-		// TODO Auto-generated method stub
-		
+	public int[][] colocarPiezas(int[][] squares) {
+		return squares;		
 	}
 }

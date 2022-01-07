@@ -95,14 +95,51 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		}
 
 		conectarAWebSocket() {
+
 			let ws = new WebSocket("ws://localhost:8080/wsGenerico");
 			ws.onopen = function(event) {
 				alert("Conexión establecida");
 			}
 			ws.onmessage = function(event) {
 				let msg = JSON.parse(event.data);
+				if(msg.type == "move"){
+					if(msg.hit == true){
+						alert("Barco golpeado!");
+						checkMove(msg)
+						
+					}
+				}
+
 			}
 		}
+		
+		checkMove(msg){
+			
+		}
+		/*checkhit(match){
+			let self = this
+			
+			let info = {
+				matchId : match.id,
+				x : this.x(),
+				y : this.y()
+			};
+
+			let data = {
+				type : "post",
+				url : "/games/checkhit",
+				data : JSON.stringify(info),
+				contentType : "application/json",
+				success : function(response) {
+					console.log(JSON.stringify(response));
+				},
+				error : function(response) {
+					console.error(response);
+					self.error(response.responseJSON.message);
+				}
+			}
+			$.ajax(data);
+		}*/
 
 		joinGame(game) {
 			let self = this;
@@ -118,7 +155,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 						match = new BarcosMatch("Hundir la flota", response)
 					self.matches.push(match);
 					self.conectarAWebSocket();
-					//self.createMap(game);
+					
 					console.log(JSON.stringify(response));
 				},
 				error : function(response) {
@@ -126,56 +163,8 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					self.error(response.responseJSON.message);
 				}
 			};
-			
 			$.ajax(data);
 		}
-		
-		createMap(game){
-			var create = function(){
-				var name = game.name;
-				var tablero = document.getElementById("idTabla");
-				if(name == "Tres en raya"){
-					for(var i = 0; i<3;i++){
-						var fila = document.createElement("tr");
-						for(var j = 0; j<3; j++){
-							var celda = document.createElement("td");
-							var textoCelda = document.createTextNode("-");
-							celda.style.background = "black";
-							celda.appendChild(textoCelda);
-							fila.appendChild(celda);
-							
-						}
-						tablero.appendChild(fila);
-					}
-				}else if(name == "Ajedrez"){
-					for(var i = 0; i<8;i++){
-						var fila = document.createElement("tr");						
-						for(var j = 0; j<8; j++){
-							var celda = document.createElement("td");
-							var textoCelda = document.createTextNode("F");
-							celda.appendChild(textoCelda);
-							celda.setAttribute("border","1px solid black");
-							fila.appendChild(celda);
-						}
-						tablero.appendChild(fila);
-					}
-				}else{
-					for(var i = 0; i<10;i++){
-						var fila = document.createElement("tr");
-						for(var j = 0; j<10; j++){
-							var celda = document.createElement("td");
-							var textoCelda = document.createTextNode("-");
-							celda.appendChild(textoCelda);
-							fila.appendChild(celda);
-						}
-						tablero.appendChild(fila);
-					}
-					//colocarPiezas()
-				}
-			}
-			create();
-		}
-
 
 		reload(match) {
 			let self = this;

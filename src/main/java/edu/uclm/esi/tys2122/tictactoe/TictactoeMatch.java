@@ -133,7 +133,8 @@ public class TictactoeMatch extends Match {
 	}
 
 	@Override
-	public void colocarPiezas() {
+	public int[][] colocarPiezas(int[][] squares) {
+		return squares;
 		// TODO Auto-generated method stub
 		
 	}

@@ -77,7 +77,11 @@
 											<td style="background: BurlyWood"><span
 												data-bind="html : $data"></span></td>
 											<!-- /ko -->
-											<!-- ko ifnot : $data==1 -->
+											<!-- ko if : $data==2 -->
+											<td style="background: FireBrick"><span
+												data-bind="html : $data"></span></td>
+											<!-- /ko -->
+											<!-- ko if : $data==0 -->
 											<td style="background: CornflowerBlue"><span
 												data-bind="html : $data"></span></td>
 											<!-- /ko -->
@@ -96,8 +100,23 @@
 										<!-- ko foreach : squares -->
 										<tr>
 											<!-- ko foreach : $data -->
-											<td style="background: CornflowerBlue"><span
-												data-bind="html : $data"></span></td>
+												<!-- ko if : $data==0 -->
+												<td style="background: CornflowerBlue"><span
+													data-bind="html : $data"></span></td>
+												<!-- /ko -->
+												<!-- ko if : $data==1 -->
+												<td style="background: CornflowerBlue"><span
+													data-bind="html : $data"></span></td>
+												<!-- /ko -->	
+												<!-- ko if : $data==3 -->
+												<td style="background: DarkBlue"><span
+													data-bind="html : $data"></span></td>
+												<!-- /ko -->
+												<!-- ko if : $data==2 -->
+												<td style="background: FireBrick"><span
+													data-bind="html : $data"></span></td>
+												<!-- /ko -->
+	
 											<!-- /ko -->
 										</tr>
 										<!-- /ko -->
@@ -147,7 +166,7 @@
 				                <!-- /ko -->
 				              </div>
 				
-				              <div>AcabÃ³ en empate: <span data-bind="html : draw"></span></div>
+				              <div>Acabó en empate: <span data-bind="html : draw"></span></div>
 							</div>
 
 

@@ -38,7 +38,7 @@ public class WebSocketGenerico extends TextWebSocketHandler {
 		WrapperSession ajedrezSesion = new WrapperSession(wsSession);
 		Manager.get().add(ajedrezSesion, httpSessionId);
 		
-		//saludarDeVezEnCuando(session);
+		//saludarDeVezEnCuando(wsSession);
 	}
 	
 	private void saludarDeVezEnCuando(WebSocketSession session) {

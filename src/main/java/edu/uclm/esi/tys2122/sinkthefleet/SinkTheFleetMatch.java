@@ -16,6 +16,8 @@ public class SinkTheFleetMatch extends Match {
 	}
 	private User winner, looser;
 	private boolean draw;
+	private int barcosOponente = 8;
+	private int barcos = 8;
 	
 	@Override
 	protected Board newBoard() {
@@ -34,14 +36,25 @@ public class SinkTheFleetMatch extends Match {
 			this.playerWithTurn = new SecureRandom().nextBoolean() ? this.players.get(0) : this.players.get(1);
 	}
 	
-	public int getSquare(Integer x, Integer y) {
-		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
-		return board.getSquares()[x][y];
+	public int getSquare(Integer x, Integer y, int player) {
+		if(player == 0){
+			SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
+			return board.getSquares()[x][y];
+		}else {
+			SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoardOponente();
+			return board.getSquares()[x][y];
+		}
+
 	}
 	
-	public void setSquare(Integer x, Integer y, int value) {
-		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
-		board.getSquares()[x][y]=value;
+	public void setSquare(Integer x, Integer y, int value, int player) {
+		if(player == 0){
+			SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
+			board.getSquares()[x][y]=value;
+		}else {
+			SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoardOponente();
+			board.getSquares()[x][y]=value;
+		}
 	}
 	
 	@Override
@@ -54,14 +67,27 @@ public class SinkTheFleetMatch extends Match {
 		
 		Integer x = jsoMovimiento.getInt("x");
 		Integer y = jsoMovimiento.getInt("y");
-		
-		if (this.getSquare(x, y)!=0)
+		int player = checkPlayer();
+		if (this.getSquare(x, y,player)==3 || this.getSquare(x, y,player)==2)
 			throw new Exception("Casilla ocupada");
 		
+
 		//int value = this.getPlayerWithTurn()==this.getPlayers().get(0) ? 1 : 2;
-		int value = 1;
-		this.setSquare(x, y, value);
-		notifyMove(x,y);
+		int value = 0;
+		boolean hit = checkHit(x,y, player);
+		if(hit) {
+			if(player == 0) {
+				barcos--;
+				value = 2;
+			}else {
+				barcosOponente--;
+				value = 2;
+			}
+		}else {
+			value = 3;
+		}
+		this.setSquare(x, y, value, player);
+		notifyMove(x,y,hit,this);
 		checkWinner();
 		
 		if (this.filled() && this.winner==null)
@@ -81,26 +107,37 @@ public class SinkTheFleetMatch extends Match {
 					return false;
 		return true;
 	}
-	private void checkHit(int x, int y) {
-		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
+	
+	private int checkPlayer() {
+		if (this.getPlayerWithTurn().getId() == this.getPlayers().get(0).getId()) {
+			return 1; // si mueve el jugador 0, me fijo en el tablero del jugador 1
+		}else {
+			return 0;
+		}
+	}
+	private boolean checkHit(int x, int y, int player) {
+		SinkTheFleetBoard board;
+		if(player == 0) {
+			board = (SinkTheFleetBoard) this.getBoardOponente();
+		}else {
+			board = (SinkTheFleetBoard) this.getBoard();
+		}
 		int[][] squares = board.getSquares();
+		if(squares[x][y] == 1) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	private void checkWinner() {
-		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
-		int[][] squares = board.getSquares();
 		
-		if (squares[0][0]!=0 && squares[0][0]==squares[0][1] && squares[0][1]==squares[0][2] ||
-				squares[1][0]!=0 && squares[1][0]==squares[1][1] && squares[1][1]==squares[1][2] ||
-				squares[2][0]!=0 && squares[2][0]==squares[2][1] && squares[2][1]==squares[2][2]) {
-			this.winner = this.getPlayerWithTurn();
-		} else if (squares[0][0]!=0 && squares[0][0]==squares[1][0] && squares[1][0]==squares[2][0] ||
-				squares[0][1]!=0 && squares[0][1]==squares[1][1] && squares[1][1]==squares[2][1] ||
-				squares[0][2]!=0 && squares[0][2]==squares[1][2] && squares[2][1]==squares[2][2]) {
-			this.winner = this.getPlayerWithTurn();
-		} else if (squares[0][0]!=0 && squares[0][0]==squares[1][1] && squares[1][1]==squares[2][2] ||
-				squares[0][2]!=0 && squares[0][2]==squares[1][1] && squares[1][1]==squares[2][0]) {
-			this.winner = this.getPlayerWithTurn();
+		if(barcos == 0) {
+			this.winner = this.getPlayers().get(1);
 		}
+		if(barcosOponente == 0) {
+			this.winner = this.getPlayers().get(0);
+		}	
+
 		if (this.winner!=null) {
 			this.looser = this.winner==this.players.get(0) ? this.players.get(1) : this.players.get(0);
 		}
@@ -118,11 +155,14 @@ public class SinkTheFleetMatch extends Match {
 		return draw;
 	}
 	
-	public void notifyMove(int x, int y) {
+	public void notifyMove(int x, int y, boolean hit, Match match) {
 		JSONObject jso = new JSONObject();
 		// jso.put("board", this.board.toJSON());
+		jso.put("type", "move");
 		jso.put("row", x);
 		jso.put("col", y);
+		jso.put("hit", hit);
+		jso.put("match", match);
 		for (User player : this.players) {
 			User user = getPlayerWithTurn();
 			if (!player.getId().equals(user.getId()))
@@ -151,27 +191,27 @@ public class SinkTheFleetMatch extends Match {
 		}		
 	}
 
-	public void colocarPiezas() {
+	public int[][] colocarPiezas(int[][] squares) {
 		
 		for(int barcos = 0; barcos <8; barcos++){
 			boolean added = false;
 			int fila = getRandomInt(0,5);
 			int columna =getRandomInt(0,5);
-			if(this.getBoard().squares[fila][columna] == 0){
-				this.getBoard().squares[fila][columna] = 1;
+			if(squares[fila][columna] == 0){
+				squares[fila][columna] = 1;
 				added = true;
 			}else{
 				while(!added){
 					fila = getRandomInt(0,5);
 					columna =getRandomInt(0,5);
-					if(this.getBoard().squares[fila][columna] == 0){
-						this.getBoard().squares[fila][columna] = 1;
+					if(squares[fila][columna] == 0){
+						squares[fila][columna] = 1;
 						added= true;
 					}
 				}
 			}
 		}
-		//this.getBoard().setSquares(this.getBoard().squares);
+		return squares;
 	}
 	public int getRandomInt(int min, int max) {
 		return (int) (Math.floor(Math.random() * (max - min)) + min);

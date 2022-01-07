@@ -42,7 +42,10 @@ public abstract class Match {
 		this.board = getBoard();
 		this.boardOponente = getBoardOponente();
 		if(gameName.equals("Hundir la flota")) {
-			colocarPiezas();
+			if(players.isEmpty()) {
+				board.setSquares(colocarPiezas(board.getSquares()));
+				boardOponente.setSquares(colocarPiezas(boardOponente.getSquares()));
+			}
 		}
 	}
 
@@ -112,6 +115,6 @@ public abstract class Match {
 
 	public abstract void notifyNewState(String userId);
 
-	public abstract void colocarPiezas();
+	public abstract int[][] colocarPiezas(int[][] squares);
 
 }
