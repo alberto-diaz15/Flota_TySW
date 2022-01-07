@@ -58,7 +58,7 @@ public class SinkTheFleetMatch extends Match {
 		//int value = this.getPlayerWithTurn()==this.getPlayers().get(0) ? 1 : 2;
 		int value = 1;
 		this.setSquare(x, y, value);
-		checkHit(x,y);
+		notifyMove(x,y);
 		checkWinner();
 		
 		if (this.filled() && this.winner==null)
@@ -113,6 +113,23 @@ public class SinkTheFleetMatch extends Match {
 	
 	public boolean isDraw() {
 		return draw;
+	}
+	
+	public void notifyMove(int x, int y) {
+		JSONObject jso = new JSONObject();
+		// jso.put("board", this.board.toJSON());
+		jso.put("row", x);
+		jso.put("col", y);
+		for (User player : this.players) {
+			User user = getPlayerWithTurn();
+			if (!player.getId().equals(user.getId()))
+				try {
+					player.sendMessage(jso);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}		
 	}
 	
 	public void notifyNewState(String userId) {

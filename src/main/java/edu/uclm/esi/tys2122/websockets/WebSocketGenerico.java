@@ -48,6 +48,7 @@ public class WebSocketGenerico extends TextWebSocketHandler {
 			public void run() {
 				while (true) {
 					try {
+						
 						session.sendMessage(new TextMessage("Hola, user agent"));
 						Thread.sleep(5000);
 					} catch (IOException | InterruptedException e) {

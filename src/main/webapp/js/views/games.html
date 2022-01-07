@@ -19,105 +19,10 @@
 					<!-- /ko -->
 				</div>
 
-<style>
-.header {
-	display: flex;
-}
 
-.tableros{
-min-height:340px
-}
-.tab_loc {
-	margin-top: 20px;
-	margin-right: 10px;
-	float: left;
-}
-
-.tab_op {
-	margin-top: 20px;
-	margin-left: 10px;
-	margin-right: 400px;
-	float: right;
-}
-
-.resultado {
-	margin-top: 20px;
-	text-align: left;
-	float: left;
-	padding-bottom: 50px;
-}
-
-.datos{
-	float: left;
-	margin-right: 80px;
-}
-
-.mov{
-	padding-top: 1px;
-	float: right;
-	margin-right:700px
-}
-
-
-@media screen and (max-width: 1450px){
-.mov{
-	float: left;
-	margin-right:20px;
-}
-}
-
-
-@media screen and (max-width: 1131px){
-.tab_op {
-	float: left;
-	margin-right: 10px;
-}
-
-.resultado{
-	float: left;
-}
-}
-
-
-@media screen and (max-width: 1000px){
-.mov{
-	margin-right: 5px;
-}
-.tableros{
-	min-height:350px;
-}
-
-.resultado{
-margin-top: 10px;
-}
-
-.tab_op {
-	margin-right: 20px;
-}
-}
-
-@media screen and (max-width: 759px){
-.datos{
-margin-right: 0px;
-}
-
-
-.mov{
-	float: left;
-	margin-right: 90%;
-}
-
-.tab_op{
-	float: left;
-	margin-left: 0px;
-	margin-right:90%;
-}
-}
-</style>
 
 				<ol>
 					<!-- ko foreach : matches -->
-					<!-- ko with : response -->
 					<li>
 					<div class="datos">
 						<div>
@@ -156,8 +61,7 @@ margin-right: 0px;
 						<button data-bind="click : function() { $parent.mover($data); }">Mover</button>
 						<br>
 						<button data-bind="click : function() { $parent.reload($data); }">Recargar partida</button>
-					</div>	
-						<!-- /ko --> 
+					</div>	 
 						<!-- ko if : nombre=="Barcos" -->
 						<br>
 						<br>
@@ -249,7 +153,103 @@ margin-right: 0px;
 
 					</li>
 					<!-- /ko -->
+					
 				</ol>
+				<style>
+					.header {
+						display: flex;
+					}
+					
+					.tableros{
+					min-height:340px
+					}
+					.tab_loc {
+						margin-top: 20px;
+						margin-right: 10px;
+						float: left;
+					}
+					
+					.tab_op {
+						margin-top: 20px;
+						margin-left: 10px;
+						margin-right: 400px;
+						float: right;
+					}
+					
+					.resultado {
+						margin-top: 20px;
+						text-align: left;
+						float: left;
+						padding-bottom: 50px;
+					}
+					
+					.datos{
+						float: left;
+						margin-right: 80px;
+					}
+					
+					.mov{
+						padding-top: 1px;
+						float: right;
+						margin-right:700px
+					}
+					
+					
+					@media screen and (max-width: 1450px){
+					.mov{
+						float: left;
+						margin-right:20px;
+					}
+					}
+					
+					
+					@media screen and (max-width: 1131px){
+					.tab_op {
+						float: left;
+						margin-right: 10px;
+					}
+					
+					.resultado{
+						float: left;
+					}
+					}
+					
+					
+					@media screen and (max-width: 1000px){
+					.mov{
+						margin-right: 5px;
+					}
+					.tableros{
+						min-height:350px;
+					}
+					
+					.resultado{
+					margin-top: 10px;
+					}
+					
+					.tab_op {
+						margin-right: 20px;
+					}
+					}
+					
+					@media screen and (max-width: 759px){
+					.datos{
+					margin-right: 0px;
+					}
+					
+					
+					.mov{
+						float: left;
+						margin-right: 90%;
+					}
+					
+					.tab_op{
+						float: left;
+						margin-left: 0px;
+						margin-right:90%;
+					}
+					}
+				</style>
 			</div>
 		</div>
 	</div>
