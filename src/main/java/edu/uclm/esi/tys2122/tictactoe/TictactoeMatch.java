@@ -11,6 +11,10 @@ import edu.uclm.esi.tys2122.model.User;
 
 public class TictactoeMatch extends Match {
 	
+	public TictactoeMatch() {
+		super("Tres en raya");
+	}
+
 	private User winner, looser;
 	private boolean draw;
 	
@@ -20,7 +24,7 @@ public class TictactoeMatch extends Match {
 	}
 	
 	@Override
-	protected Board newOponentBoard() {
+	protected Board newBoardOponente() {
 		return null;
 	}
 
@@ -126,6 +130,12 @@ public class TictactoeMatch extends Match {
 					e.printStackTrace();
 				}
 		}		
+	}
+
+	@Override
+	public void colocarPiezas() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

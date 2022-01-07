@@ -12,8 +12,8 @@ import edu.uclm.esi.tys2122.model.User;
 
 @Entity
 public class ChessMatch extends Match {
-	public ChessMatch() {
-		super();
+	public ChessMatch(String gameName) {
+		super(gameName);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class ChessMatch extends Match {
 	}
 	
 	@Override
-	protected Board newOponentBoard() {
+	protected Board newBoardOponente() {
 		return null;
 	}
 
@@ -54,5 +54,11 @@ public class ChessMatch extends Match {
 					e.printStackTrace();
 				}
 		}		
+	}
+
+	@Override
+	public void colocarPiezas() {
+		// TODO Auto-generated method stub
+		
 	}
 }

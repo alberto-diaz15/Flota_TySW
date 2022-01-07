@@ -48,7 +48,8 @@ public class GamesService {
 	}
 
 	public Match getMatch(String matchId) {
-		return this.matches.get(matchId);
+		Match match = this.matches.get(matchId);
+		return match;
 	}
 
 }

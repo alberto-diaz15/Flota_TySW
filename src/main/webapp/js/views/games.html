@@ -23,46 +23,41 @@
 
 				<ol>
 					<!-- ko foreach : matches -->
-					<li>
-					<div class="datos">
-						<div>
-							Id: <label data-bind="html : id"></label>
-						</div>
-
-						<div>
-							Preparada: <span data-bind="html : ready"></span>
-						</div>
-						<div>
-							Jugador 1: <span data-bind="html : players[0].name"></span>
-						</div>
-
-						<div>
-							Jugador 2:
-							<!-- ko if : players[1] -->
-							<span data-bind="html : players[1].name"></span>
-							<!-- /ko -->
-							<!-- ko ifnot : players[1] -->
-							Esperando
-							<!-- /ko -->
-						</div>
-
-						<div>
-							Jugador con el turno:
-							<!-- ko if : playerWithTurn -->
-							<span data-bind="html : playerWithTurn.name"></span>
-							<!-- /ko -->
-						</div>
-					</div>
 					
-					<div class="mov">
-						<input data-bind="value : $parent.x" type="number" size="1" placeholder="X"> 
-						<br>
-						<input data-bind="value : $parent.y" type="number" size="1" placeholder="Y">
-						<button data-bind="click : function() { $parent.mover($data); }">Mover</button>
-						<br>
-						<button data-bind="click : function() { $parent.reload($data); }">Recargar partida</button>
-					</div>	 
-						<!-- ko if : nombre=="Barcos" -->
+					<li>
+						<div class="datos">
+			              <div>Id: <label data-bind="html : id"></label></div>
+			
+			              <div>Preparada: <span data-bind="html : ready"></span></div>
+			              <!-- ko if : players[0] -->
+			              	<div>Jugador 1: <span data-bind="html : players[0].name"></span></div>
+			              <!-- /ko -->
+			
+			              <div>Jugador 2: 
+			                <!-- ko if : players[1] -->
+			                  <span data-bind="html : players[1].name"></span>
+			                <!-- /ko -->
+			                <!-- ko ifnot : players[1] -->
+			                  Esperando
+			                <!-- /ko -->
+			              </div>
+			      
+			              <div>Jugador con el turno:
+			                <!-- ko if : playerWithTurn -->
+			                  <span data-bind="html : playerWithTurn.name"></span>
+			                <!-- /ko -->
+			              </div>
+						</div>
+						
+						<div class="mov">
+							<input data-bind="value : $parent.x" type="number" size="1" placeholder="X"> 
+							<br>
+							<input data-bind="value : $parent.y" type="number" size="1" placeholder="Y">
+							<button data-bind="click : function() { $parent.mover($data); }">Mover</button>
+							<br>
+							<button data-bind="click : function() { $parent.reload($data); }">Recargar partida</button>
+						</div>
+						<!-- ko if : nombre=="Hundir la flota" -->
 						<br>
 						<br>
 						<br>
@@ -74,7 +69,7 @@
 									Tablero local:
 									<table width="300px" height="300px" border="5px solid black"
 										border-collapse="collapse">
-										<!-- ko with : boardLocal -->
+										<!-- ko with : board -->
 										<!-- ko foreach : squares -->
 										<tr>
 											<!-- ko foreach : $data -->
@@ -111,43 +106,49 @@
 								</div>
 							</div>
 							<!-- /ko -->
-							<!-- ko if : nombre=="TER" -->
-
-						
-						<div>
-							<div class="tab_loc">
-								Tablero:
-								<table width="300px" height="300px" border="5px solid black"
-									border-collapse="collapse">
-									<!-- ko with : boardLocal -->
-
-									<!-- ko foreach : squares -->
-									<tr>
-										<!-- ko foreach : $data -->
-										<td><span data-bind="html : $data"></span></td>
+							<!-- ko if : nombre=="Tres en raya" -->			
+							<div>
+								<div class="tab_loc">
+									Tablero:
+									<table width="300px" height="300px" border="5px solid black"
+										border-collapse="collapse">
+										<!-- ko with : board -->
+	
+											<!-- ko foreach : squares -->
+											<tr>
+												<!-- ko foreach : $data -->
+												<td><span data-bind="html : $data"></span></td>
+												<!-- /ko -->
+											</tr>
+											<!-- /ko -->
 										<!-- /ko -->
-									</tr>
-									<!-- /ko -->
-									<!-- /ko -->
-								</table>
-							</div>
-						</div> <!-- /ko -->
-						</div>
-
-						<div class="resultado">
-							<!-- ko with : response -->
-							<div>
-								Ganador: <span data-bind="html : winner"></span>
-							</div>
-							<div>
-								Perdedor: <span data-bind="html : looser"></span>
-							</div>
-							<div>
-								Acabó en empate: <span data-bind="html : draw"></span>
+									</table>
+								</div>
 							</div>
 							<!-- /ko -->
-							<p></p>
-						</div>
+							</div>
+	
+							<div class="resultado">
+				              <div>Ganador:
+				                <!-- ko if : winner --> 
+				                  <span data-bind="html : winner.name"></span>
+				                <!-- /ko -->
+				                <!-- ko ifnot : winner -->
+				                  De momento, nadie
+				                <!-- /ko -->
+				              </div>
+				
+				              <div>Perdedor:
+				                <!-- ko if : looser --> 
+				                  <span data-bind="html : looser.name"></span>
+				                <!-- /ko -->
+				                <!-- ko ifnot : looser -->
+				                  De momento, nadie
+				                <!-- /ko -->
+				              </div>
+				
+				              <div>AcabÃ³ en empate: <span data-bind="html : draw"></span></div>
+							</div>
 
 
 

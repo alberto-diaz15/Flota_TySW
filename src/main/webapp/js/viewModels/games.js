@@ -67,7 +67,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				},
 				error : function(response) {
 					console.error(response);
-					self.error(response);
+					self.error(response.responseJSON.message);
 				}
 			}
 			$.ajax(data);
@@ -113,9 +113,9 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				success : function(response) {
 					let match
 					if (game.name=="Tres en raya")
-						match = new TERMatch("TER", response)
+						match = new TERMatch("Tres en raya", response)
 					else
-						match = new BarcosMatch("Barcos", response)
+						match = new BarcosMatch("Hundir la flota", response)
 					self.matches.push(match);
 					self.conectarAWebSocket();
 					//self.createMap(game);

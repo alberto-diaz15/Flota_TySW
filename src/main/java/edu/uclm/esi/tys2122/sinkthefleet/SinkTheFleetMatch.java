@@ -11,6 +11,9 @@ import edu.uclm.esi.tys2122.model.User;
 
 public class SinkTheFleetMatch extends Match {
 
+	public SinkTheFleetMatch() {
+		super("Hundir la flota");
+	}
 	private User winner, looser;
 	private boolean draw;
 	
@@ -20,7 +23,7 @@ public class SinkTheFleetMatch extends Match {
 	}
 	
 	@Override
-	protected Board newOponentBoard() {
+	protected Board newBoardOponente() {
 		return new SinkTheFleetBoard();
 	}
 	
@@ -146,5 +149,31 @@ public class SinkTheFleetMatch extends Match {
 					e.printStackTrace();
 				}
 		}		
+	}
+
+	public void colocarPiezas() {
+		
+		for(int barcos = 0; barcos <8; barcos++){
+			boolean added = false;
+			int fila = getRandomInt(0,5);
+			int columna =getRandomInt(0,5);
+			if(this.getBoard().squares[fila][columna] == 0){
+				this.getBoard().squares[fila][columna] = 1;
+				added = true;
+			}else{
+				while(!added){
+					fila = getRandomInt(0,5);
+					columna =getRandomInt(0,5);
+					if(this.getBoard().squares[fila][columna] == 0){
+						this.getBoard().squares[fila][columna] = 1;
+						added= true;
+					}
+				}
+			}
+		}
+		//this.getBoard().setSquares(this.getBoard().squares);
+	}
+	public int getRandomInt(int min, int max) {
+		return (int) (Math.floor(Math.random() * (max - min)) + min);
 	}
 }

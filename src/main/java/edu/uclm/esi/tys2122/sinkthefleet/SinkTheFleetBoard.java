@@ -11,10 +11,7 @@ public class SinkTheFleetBoard extends Board {
 		for (int i=0; i<6; i++)
 			for (int j=0; j<6; j++)
 				this.squares[i][j] = 0;
-		this.squares[3][3]=1;
+				this.setSquares(squares);
 	}
-	
-	public int[][] getSquares() {
-		return squares;
-	}
+
 }

@@ -19,6 +19,9 @@ public abstract class Match {
 	private String id;
 	
 	@Transient
+	private String nombre;
+	
+	@Transient
 	private Board board;
 	
 	@Transient
@@ -33,11 +36,14 @@ public abstract class Match {
 	@Transient
 	protected boolean ready;
 	
-	public Match() {
+	public Match(String gameName) {
 		this.id = UUID.randomUUID().toString();
 		this.players = new Vector<>();
-		this.board = newBoard();
-		this.boardOponente = newOponentBoard();
+		this.board = getBoard();
+		this.boardOponente = getBoardOponente();
+		if(gameName.equals("Hundir la flota")) {
+			colocarPiezas();
+		}
 	}
 
 	public String getId() {
@@ -47,19 +53,33 @@ public abstract class Match {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
 
 	public Board getBoard() {
+		if(board == null) {
+			board = newBoard();
+		}		
 		return board;
 	}
 	
-	public Board getOponentBoard() {
+	public Board getBoardOponente() {
+		if (boardOponente == null) {
+			boardOponente = newBoardOponente();
+		}
 		return boardOponente;
 	}
 	public void setBoard(Board board) {
 		this.board = board;
 	}
 	
-	public void setOponentBoard(Board board) {
+	public void setBoardOponente(Board board) {
 		this.boardOponente = board;
 	}
 
@@ -86,10 +106,12 @@ public abstract class Match {
 
 	protected abstract Board newBoard();
 	
-	protected abstract Board newOponentBoard();
+	protected abstract Board newBoardOponente();
 
 	public abstract void move(String userId, JSONObject jso) throws Exception;
 
 	public abstract void notifyNewState(String userId);
+
+	public abstract void colocarPiezas();
 
 }

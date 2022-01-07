@@ -11,6 +11,6 @@ public class ChessGame extends Game {
 
 	@Override
 	public Match newMatch() {
-		return new ChessMatch();
+		return new ChessMatch("Ajedrez");
 	}
 }

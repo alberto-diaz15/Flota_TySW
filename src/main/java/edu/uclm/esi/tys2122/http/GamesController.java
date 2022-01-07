@@ -55,6 +55,7 @@ public class GamesController extends CookiesController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN,"No se encuentra el juego " + gameName);
 		
 		Match match = getMatch(game);
+		match.setNombre(gameName);
 		match.addPlayer(user);
 		if (match.isReady()) {
 			game.getPendingMatches().remove(match);
@@ -80,7 +81,8 @@ public class GamesController extends CookiesController {
 	
 	@GetMapping("/findMatch/{matchId}")
 	public Match findMatch(@PathVariable String matchId) {
-		return gamesService.getMatch(matchId);
+		Match match=gamesService.getMatch(matchId);
+		return match;
 	}
 
 	private Match getMatch(Game game) {
