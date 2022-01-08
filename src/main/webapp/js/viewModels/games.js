@@ -140,7 +140,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				contentType : "application/json",
 				success : function(response) {
 					var message = document.createElement("span")
-					message.textContent = msg.msg
+					message.textContent = this.msg
 					var chat = document.getElementById("chatShow")
 					chat.appendChild(message);
 					console.log(JSON.stringify(response));

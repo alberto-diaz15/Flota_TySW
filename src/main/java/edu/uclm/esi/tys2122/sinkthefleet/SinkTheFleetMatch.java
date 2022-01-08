@@ -14,7 +14,7 @@ public class SinkTheFleetMatch extends Match {
 	public SinkTheFleetMatch() {
 		super("Hundir la flota");
 	}
-	private User winner, looser;
+	private User winner = null, looser= null;
 	private boolean draw;
 	private int barcosOponente = 8;
 	private int barcos = 8;
@@ -59,7 +59,7 @@ public class SinkTheFleetMatch extends Match {
 	
 	@Override
 	public void move(String userId, JSONObject jsoMovimiento) throws Exception {
-		if (this.filled())
+		if (this.winner!=null)
 			throw new Exception("La partida ya terminó");
 		
 		if (!this.getPlayerWithTurn().getId().equals(userId))
@@ -90,15 +90,21 @@ public class SinkTheFleetMatch extends Match {
 		notifyMove(x,y,hit,this);
 		checkWinner();
 		
+		
+		if (this.winner==null) {
+			this.playerWithTurn = this.getPlayerWithTurn()==this.getPlayers().get(0) ?
+				this.getPlayers().get(1) : this.getPlayers().get(0);
+		}
+		/*
 		if (this.filled() && this.winner==null)
 			this.draw = true;
 		else {
 			this.playerWithTurn = this.getPlayerWithTurn()==this.getPlayers().get(0) ?
 				this.getPlayers().get(1) : this.getPlayers().get(0);
-		}
+		}*/
 	}
 	
-	private boolean filled() {
+	/*private boolean filled() {
 		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
 		int[][] squares = board.getSquares();
 		for (int i=0; i<3; i++)
@@ -106,7 +112,7 @@ public class SinkTheFleetMatch extends Match {
 				if (squares[i][j]==0)
 					return false;
 		return true;
-	}
+	}*/
 	
 	private int checkPlayer() {
 		if (this.getPlayerWithTurn().getId() == this.getPlayers().get(0).getId()) {
@@ -118,9 +124,9 @@ public class SinkTheFleetMatch extends Match {
 	private boolean checkHit(int x, int y, int player) {
 		SinkTheFleetBoard board;
 		if(player == 0) {
-			board = (SinkTheFleetBoard) this.getBoardOponente();
-		}else {
 			board = (SinkTheFleetBoard) this.getBoard();
+		}else {
+			board = (SinkTheFleetBoard) this.getBoardOponente();
 		}
 		int[][] squares = board.getSquares();
 		if(squares[x][y] == 1) {
