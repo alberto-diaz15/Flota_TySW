@@ -108,8 +108,6 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				if(msg.type == "move"){
 					if(msg.hit == true){
 						alert("Barco golpeado!");
-						checkMove(msg)
-						
 					}
 				}else if(msg.type == "msg"){
 					alert("Me llega el mensaje del chat");
@@ -121,10 +119,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 
 			}
 		}
-		
-		checkMove(msg){
-			
-		}
+
 		sendMsg(match){
 			let self = this
 			
