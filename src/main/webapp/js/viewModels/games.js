@@ -4,9 +4,12 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 	class MenuViewModel {
 		constructor() {
 			let self = this;
+			self.user;
 
 			self.games = ko.observableArray([]);
 			self.matches = ko.observableArray([]);
+
+			self.msg = ko.observable();
 
 			self.x = ko.observable(null);
 			self.y = ko.observable(null);
@@ -108,6 +111,12 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 						checkMove(msg)
 						
 					}
+				}else if(msg.type == "msg"){
+					alert("Me llega el mensaje del chat");
+					var message = document.createElement("span")
+					message.textContent = msg.msg
+					var chat = document.getElementById("chatShow")
+					chat.appendChild(message);
 				}
 
 			}
@@ -116,21 +125,24 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		checkMove(msg){
 			
 		}
-		/*checkhit(match){
+		sendMsg(match){
 			let self = this
 			
 			let info = {
 				matchId : match.id,
-				x : this.x(),
-				y : this.y()
+				msg : this.msg()
 			};
 
 			let data = {
 				type : "post",
-				url : "/games/checkhit",
+				url : "/games/sendMsg",
 				data : JSON.stringify(info),
 				contentType : "application/json",
 				success : function(response) {
+					var message = document.createElement("span")
+					message.textContent = msg.msg
+					var chat = document.getElementById("chatShow")
+					chat.appendChild(message);
 					console.log(JSON.stringify(response));
 				},
 				error : function(response) {
@@ -139,7 +151,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				}
 			}
 			$.ajax(data);
-		}*/
+		}
 
 		joinGame(game) {
 			let self = this;
@@ -149,13 +161,27 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				url : "/games/joinGame/" + game.name,
 				success : function(response) {
 					let match
+					
+					if(response.players.length == 1){
+						self.user= response.owner.id
+						sessionStorage.setItem("User", self.user)
+					}else{
+						for(var i = 0; i<response.players.length;i++ ){
+							if(response.players[i] != response.owner.id){
+								self.user = response.players[i].id
+								sessionStorage.setItem("User", self.user)
+							}
+						}
+					}
+					
 					if (game.name=="Tres en raya")
 						match = new TERMatch("Tres en raya", response)
 					else
 						match = new BarcosMatch("Hundir la flota", response)
 					self.matches.push(match);
 					self.conectarAWebSocket();
-					
+
+					console.log(self.user);
 					console.log(JSON.stringify(response));
 				},
 				error : function(response) {
@@ -175,7 +201,10 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				success : function(response) {
 					for (let i=0; i<self.matches().length; i++)
 						if (self.matches()[i].id==match.id) {
-							self.matches.splice(i, 1, response);
+							response.id = match.id
+							match = new BarcosMatch("Hundir la flota",response)
+							match.checkBoard(response);
+							self.matches.splice(i, 1, match);
 							break;
 						}
 					console.log(JSON.stringify(response));

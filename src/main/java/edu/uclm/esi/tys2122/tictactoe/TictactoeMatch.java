@@ -139,5 +139,19 @@ public class TictactoeMatch extends Match {
 		
 	}
 
-
+	public void notifyNewMessage(User user, String msg) {
+		JSONObject jso = new JSONObject();
+		jso.put("type", "msg");
+		jso.put("msg", user.getName()+": "+msg);
+		
+		for (User player : this.players) {
+			if (!player.getId().equals(user.getId()))
+				try {
+					player.sendMessage(jso);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}		
+	}
 }

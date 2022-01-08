@@ -12,5 +12,15 @@ class Match {
 		this.board = response.board;
 		this.game = response.game;
 	}
-	
+	checkBoard(response){
+		if(this.nombre == "Hundir la flota"){
+			if(response.players[0].id == sessionStorage.getItem("User") && this.board.player.id == sessionStorage.getItem("User")){
+				this.board = response.board
+				this.boardOponente = response.boardOponente
+			}else{
+				this.board = response.boardOponente
+				this.boardOponente = response.board
+			}			
+		}
+	}
 }

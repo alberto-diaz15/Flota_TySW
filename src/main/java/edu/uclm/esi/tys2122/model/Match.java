@@ -22,6 +22,9 @@ public abstract class Match {
 	private String nombre;
 	
 	@Transient
+	private User owner;
+	
+	@Transient
 	private Board board;
 	
 	@Transient
@@ -100,6 +103,17 @@ public abstract class Match {
 		return playerWithTurn;
 	}
 	
+
+	public  User getOwner() {
+		return owner;
+	}
+
+	public  void setOwner(User user) {
+		this.owner = user;
+
+	}
+
+	
 	@Transient
 	public Vector<User> getPlayers() {
 		return players;
@@ -116,5 +130,7 @@ public abstract class Match {
 	public abstract void notifyNewState(String userId);
 
 	public abstract int[][] colocarPiezas(int[][] squares);
+
+	public abstract void notifyNewMessage(User userOrigen, String msg);
 
 }

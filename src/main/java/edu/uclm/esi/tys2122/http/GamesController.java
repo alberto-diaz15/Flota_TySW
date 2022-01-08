@@ -54,9 +54,19 @@ public class GamesController extends CookiesController {
 		if (game==null)
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN,"No se encuentra el juego " + gameName);
 		
-		Match match = getMatch(game);
+		Match match = getMatch(game, user);
 		match.setNombre(gameName);
 		match.addPlayer(user);
+		
+		if(match.getOwner() == null) {
+			match.setOwner(user);
+		}
+		if(match.getBoard().getPlayer() == null && match.getOwner().getId().equals(user.getId())) {
+			match.getBoard().setPlayer(user);
+		}else if(match.getBoardOponente().getPlayer() == null){
+			match.getBoardOponente().setPlayer(user);
+		}
+		
 		if (match.isReady()) {
 			game.getPendingMatches().remove(match);
 			game.getPlayingMatches().add(match);
@@ -80,13 +90,27 @@ public class GamesController extends CookiesController {
 		return match;
 	}
 	
+	@PostMapping("/sendMsg")
+	public Match sendMsg(HttpSession session, @RequestBody Map<String, Object> msg)  {
+		User user = (User) session.getAttribute("user");
+		JSONObject jso = new JSONObject(msg);
+		Match match = gamesService.getMatch(jso.getString("matchId"));
+		try {
+			match.notifyNewMessage(user,jso.getString("msg"));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+		}
+		gamesService.put(match);
+		return match;
+	}
+	
 	@GetMapping("/findMatch/{matchId}")
 	public Match findMatch(@PathVariable String matchId) {
 		Match match=gamesService.getMatch(matchId);
 		return match;
 	}
 
-	private Match getMatch(Game game) {
+	private Match getMatch(Game game,User user) {
 		Match match;
 		if (game.getPendingMatches().isEmpty()) {
 			match = game.newMatch();

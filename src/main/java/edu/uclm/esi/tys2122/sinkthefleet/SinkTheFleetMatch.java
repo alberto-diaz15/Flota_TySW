@@ -216,4 +216,20 @@ public class SinkTheFleetMatch extends Match {
 	public int getRandomInt(int min, int max) {
 		return (int) (Math.floor(Math.random() * (max - min)) + min);
 	}
+
+	public void notifyNewMessage(User user, String msg) {
+		JSONObject jso = new JSONObject();
+		jso.put("type", "msg");
+		jso.put("msg", user.getName()+": "+msg);
+		
+		for (User player : this.players) {
+			if (!player.getId().equals(user.getId()))
+				try {
+					player.sendMessage(jso);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}		
+	}
 }
