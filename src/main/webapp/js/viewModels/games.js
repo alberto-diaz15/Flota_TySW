@@ -115,6 +115,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					message.textContent = msg.msg
 					var chat = document.getElementById("chatShow")
 					chat.appendChild(message);
+					chat.appendChild(document.createElement("br"))
 				}
 
 			}
@@ -135,9 +136,17 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				contentType : "application/json",
 				success : function(response) {
 					var message = document.createElement("span")
-					message.textContent = this.msg
+					var nombre = ""
+					for (var i=0; i<response.players.length; i++){
+						if(response.players[i].id==sessionStorage.User){
+							nombre = response.players[i].name + ": " + info.msg
+							break;	
+						}
+					}
+					message.textContent = nombre
 					var chat = document.getElementById("chatShow")
 					chat.appendChild(message);
+					chat.appendChild(document.createElement("br"))
 					console.log(JSON.stringify(response));
 				},
 				error : function(response) {
