@@ -116,6 +116,14 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					var chat = document.getElementById("chatShow")
 					chat.appendChild(message);
 					chat.appendChild(document.createElement("br"))
+				}else if( msg.type == "disconnected"){
+					var message = document.createElement("span")
+					message.textContent = msg.msg
+					var chat = document.getElementById("chatShow")
+					chat.appendChild(message);
+					chat.appendChild(document.createElement("br"))
+				}else if( msg.type == "connected"){
+					reload(msg.match)
 				}
 
 			}
@@ -159,7 +167,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 
 		joinGame(game) {
 			let self = this;
-
+			
 			let data = {
 				type : "get",
 				url : "/games/joinGame/" + game.name,
@@ -187,12 +195,36 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 
 					console.log(self.user);
 					console.log(JSON.stringify(response));
+					reload(match)
 				},
 				error : function(response) {
 					console.error(response.responseJSON.message);
 					self.error(response.responseJSON.message);
 				}
 			};
+			$.ajax(data);
+		}
+		
+		sendConnected(match){
+			let self = this
+			
+			let info = {
+				matchId : match.id
+			};
+
+			let data = {
+				type : "post",
+				url : "/games/sendConnected",
+				data : JSON.stringify(info),
+				contentType : "application/json",
+				success : function(response) {
+					console.log(JSON.stringify(response));
+				},
+				error : function(response) {
+					console.error(response);
+					self.error(response.responseJSON.message);
+				}
+			}
 			$.ajax(data);
 		}
 
@@ -222,7 +254,34 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		}
 
 		disconnected() {
-			// Implement if needed
+			let self = this
+		    if(self.matches._latestValue.length =! 0){
+				for(var i = 0 ; i<self.matches._latestValue.length;i++){
+					var match = self.matches._latestValue[i]
+					if(match != undefined){
+										let info = {
+						matchId : match.id, 
+						msg : "Se ha desconectado, Has ganado"
+					};
+		
+					let data = {
+						type : "post",
+						url : "/games/disconnected",
+						data : JSON.stringify(info),
+						contentType : "application/json",
+						success : function(response) {
+							console.log(JSON.stringify(response));
+						},
+						error : function(response) {
+							console.error(response);
+							self.error(response.responseJSON.message);
+						}
+					}
+					$.ajax(data);	
+					}
+				}					
+			}	
+
 		};
 
 		transitionCompleted() {

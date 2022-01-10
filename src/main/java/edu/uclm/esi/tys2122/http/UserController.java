@@ -54,6 +54,8 @@ public class UserController extends CookiesController {
 			if (user!=null) {
 				userService.insertLogin(user, request.getRemoteAddr(), cookie);
 				request.getSession().setAttribute("userId", user.getId());
+				request.getSession().setAttribute("user", user);
+
 				return "games";
 			}
 		}
@@ -85,6 +87,8 @@ public class UserController extends CookiesController {
 			userDAO.save(user);
 			userService.insertLogin(user, ip, cookies[0]);
 			request.getSession().setAttribute("userId", user.getId());
+			request.getSession().setAttribute("user", user);
+
 		}else {
 			registerGoogle(credenciales);
 			user = userService.doLoginGoogle(googleId);
@@ -94,6 +98,8 @@ public class UserController extends CookiesController {
 			userDAO.save(user);
 			userService.insertLogin(user, ip, cookies[0]);
 			request.getSession().setAttribute("userId", user.getId());
+			request.getSession().setAttribute("user", user);
+
 		}
 	}
 
@@ -111,6 +117,8 @@ public class UserController extends CookiesController {
 		userDAO.save(user);
 		userService.insertLogin(user, ip, cookies[0]);
 		request.getSession().setAttribute("userId", user.getId());
+		request.getSession().setAttribute("user", user);
+
 	}
 
 	@PostMapping(value = "/sendRestorePwd")	

@@ -3,6 +3,7 @@ package edu.uclm.esi.tys2122.http;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import edu.uclm.esi.tys2122.dao.UserRepository;
 import edu.uclm.esi.tys2122.model.Game;
 import edu.uclm.esi.tys2122.model.Match;
 import edu.uclm.esi.tys2122.model.User;
@@ -28,6 +30,9 @@ import edu.uclm.esi.tys2122.services.UserService;
 public class GamesController extends CookiesController {
 	@Autowired
 	private GamesService gamesService;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	@Autowired
 	private UserService userService;
@@ -80,9 +85,13 @@ public class GamesController extends CookiesController {
 		User user = (User) session.getAttribute("user");
 		JSONObject jso = new JSONObject(movement);
 		Match match = gamesService.getMatch(jso.getString("matchId"));
+		User winner = null;
 		try {
-			match.move(user.getId(), jso);
-			match.notifyNewState(user.getId());
+			winner = match.move(user.getId(), jso);
+			match.notifyNewState(user,match);
+			if(winner != null) {
+				addGameWon(winner);
+			}
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
 		}
@@ -102,6 +111,44 @@ public class GamesController extends CookiesController {
 		}
 		gamesService.put(match);
 		return match;
+	}
+	
+	@PostMapping("/sendConnected")
+	public Match sendConnected(HttpSession session, @RequestBody Map<String, Object> msg)  {
+		User user = (User) session.getAttribute("user");
+		JSONObject jso = new JSONObject(msg);
+		Match match = gamesService.getMatch(jso.getString("matchId"));
+		try {
+			match.notifyNewState(user, match);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+		}
+		gamesService.put(match);
+		return match;
+	}
+	@PostMapping("/disconnected")
+	public Match disconnected(HttpSession session, @RequestBody Map<String, Object> msg)  {
+		User user = (User) session.getAttribute("user");
+		JSONObject jso = new JSONObject(msg);
+		Match match = gamesService.getMatch(jso.getString("matchId"));
+		User winner = null;
+		try {
+			winner = match.notifyDisconnected(user,jso.getString("msg"));
+			addGameWon(winner);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+		}
+		
+		gamesService.put(match);
+		return match;
+	}
+	
+	public void addGameWon(User user) {
+		Optional<User> winnerAux = userRepo.findById(user.getId());
+		if (!winnerAux.isEmpty()) {
+			winnerAux.get().addGamesWon();
+			userRepo.save(winnerAux.get());
+		}	
 	}
 	
 	@GetMapping("/findMatch/{matchId}")

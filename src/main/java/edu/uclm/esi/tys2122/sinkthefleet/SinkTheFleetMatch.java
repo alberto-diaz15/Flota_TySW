@@ -2,9 +2,12 @@ package edu.uclm.esi.tys2122.sinkthefleet;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Optional;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.uclm.esi.tys2122.dao.UserRepository;
 import edu.uclm.esi.tys2122.model.Board;
 import edu.uclm.esi.tys2122.model.Match;
 import edu.uclm.esi.tys2122.model.User;
@@ -14,6 +17,9 @@ public class SinkTheFleetMatch extends Match {
 	public SinkTheFleetMatch() {
 		super("Hundir la flota");
 	}
+	
+
+	
 	private User winner = null, looser= null;
 	private boolean draw;
 	private int barcosOponente = 8;
@@ -58,7 +64,7 @@ public class SinkTheFleetMatch extends Match {
 	}
 	
 	@Override
-	public void move(String userId, JSONObject jsoMovimiento) throws Exception {
+	public User move(String userId, JSONObject jsoMovimiento) throws Exception {
 		if (this.winner!=null)
 			throw new Exception("La partida ya terminó");
 		
@@ -95,6 +101,7 @@ public class SinkTheFleetMatch extends Match {
 			this.playerWithTurn = this.getPlayerWithTurn()==this.getPlayers().get(0) ?
 				this.getPlayers().get(1) : this.getPlayers().get(0);
 		}
+		return winner;
 		/*
 		if (this.filled() && this.winner==null)
 			this.draw = true;
@@ -181,13 +188,12 @@ public class SinkTheFleetMatch extends Match {
 		}		
 	}
 	
-	public void notifyNewState(String userId) {
+	public void notifyNewState(User user, Match match) {
 		JSONObject jso = new JSONObject();
-		jso.put("type", "BOARD");
-		// jso.put("board", this.board.toJSON());
-		
+		jso.put("type", "connected");	
+		jso.put("match", match);
 		for (User player : this.players) {
-			if (!player.getId().equals(userId))
+			if (!player.getId().equals(user.getId()))
 				try {
 					player.sendMessage(jso);
 				} catch (IOException e) {
@@ -238,4 +244,27 @@ public class SinkTheFleetMatch extends Match {
 				}
 		}		
 	}
+	
+	public User notifyDisconnected(User user, String msg) {
+		JSONObject jso = new JSONObject();
+		jso.put("type", "disconnected");
+		jso.put("msg", user.getName()+": "+msg);
+		for (User player : this.players) {
+			if (!player.getId().equals(user.getId()))
+				try {
+					if(winner ==null) {
+						player.sendMessage(jso);
+						winner = player;
+						looser = user;
+						return winner;
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return winner;		
+	}
+	
+
 }

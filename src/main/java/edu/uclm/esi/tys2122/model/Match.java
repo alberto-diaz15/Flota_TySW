@@ -125,12 +125,14 @@ public abstract class Match {
 	
 	protected abstract Board newBoardOponente();
 
-	public abstract void move(String userId, JSONObject jso) throws Exception;
+	public abstract User move(String userId, JSONObject jso) throws Exception;
 
-	public abstract void notifyNewState(String userId);
+	public abstract void notifyNewState(User user, Match match);
 
 	public abstract int[][] colocarPiezas(int[][] squares);
 
 	public abstract void notifyNewMessage(User userOrigen, String msg);
+
+	public abstract User notifyDisconnected(User user, String string);
 
 }

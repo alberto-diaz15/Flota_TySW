@@ -171,26 +171,26 @@
 							</div>
 
 							<div>
-								Acabó en empate: <span data-bind="html : draw"></span>
+								Acabï¿½ en empate: <span data-bind="html : draw"></span>
 							</div>
 							<br><br><br><br><br><br>
 						</div>
 						
-						<div class="chat">
-							<div class="chatBox">
-								<div id="chatShow"></div>
-							</div>
-								<form id="chatForm" onsubmit="return function() { $parent.sendMsg(); };">
-								  <input id="chatMsg" type="text" placeholder="Escriba su mensaje" data-bind="value : $parent.msg"/>
-								  <input id="chatGo" type="submit" value="Go" data-bind="click : function() { $parent.sendMsg($data); }"/>
-								</form>
+	
+					<div class="chat">
+						<div class="chatBox">
+							<div id="chatShow"></div>
 						</div>
-						
+							<form id="chatForm" onsubmit="return function() { $parent.sendMsg(); };">
+							  <input id="chatMsg" type="text" placeholder="Escriba su mensaje" data-bind="value : $parent.msg"/>
+							  <input id="chatGo" type="submit" value="Go" data-bind="click : function() { $parent.sendMsg($data); }"/>
+							</form>
+					</div>						
 					</li>
 					<!-- /ko -->
 
 				</ol>
-				
+
 				<style>
 				
 					.chat{

@@ -40,10 +40,26 @@ public class User {
 	private Long confirmationDate;
 	@Column(length = 36)
 	private String cookie;
+	@Column
+	private int gamesWon;
+
 	private String origen;
 	
 	@Transient
 	private WrapperSession session;
+	
+	public int getGamesWon() {
+		return gamesWon;
+	}
+	
+	public void addGamesWon() {
+		this.gamesWon = this.gamesWon+1;
+	}
+
+	public void setGamesWon(int gamesWon) {
+		this.gamesWon = gamesWon;
+	}
+	
 	
 	public String getOrigen() {
 		return origen;
@@ -55,6 +71,7 @@ public class User {
 
 	public User() {
 		this.id = UUID.randomUUID().toString();
+		this.gamesWon = 0;
 	}
 
 	public String getId() {
