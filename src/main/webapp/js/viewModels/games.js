@@ -67,6 +67,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				contentType : "application/json",
 				success : function(response) {
 					console.log(JSON.stringify(response));
+					self.reload(match)
 				},
 				error : function(response) {
 					console.error(response);
@@ -98,7 +99,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		}
 
 		conectarAWebSocket() {
-
+			let self = this
 			let ws = new WebSocket("ws://localhost:8080/wsGenerico");
 			ws.onopen = function(event) {
 				alert("Conexión establecida");
@@ -109,6 +110,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					if(msg.hit == true){
 						alert("Barco golpeado!");
 					}
+					self.reload(match)
 				}else if(msg.type == "msg"){
 					alert("Me llega el mensaje del chat");
 					var message = document.createElement("span")
@@ -123,7 +125,8 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					chat.appendChild(message);
 					chat.appendChild(document.createElement("br"))
 				}else if( msg.type == "connected"){
-					reload(msg.match)
+					self.reload(match)
+
 				}
 
 			}
@@ -195,7 +198,6 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 
 					console.log(self.user);
 					console.log(JSON.stringify(response));
-					reload(match)
 				},
 				error : function(response) {
 					console.error(response.responseJSON.message);
