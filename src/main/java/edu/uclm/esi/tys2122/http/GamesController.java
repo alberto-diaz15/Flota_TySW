@@ -76,6 +76,7 @@ public class GamesController extends CookiesController {
 			game.getPendingMatches().remove(match);
 			game.getPlayingMatches().add(match);
 		}
+		match.notifyNewState(user, match);
 		gamesService.put(match);
 		return match;
 	}

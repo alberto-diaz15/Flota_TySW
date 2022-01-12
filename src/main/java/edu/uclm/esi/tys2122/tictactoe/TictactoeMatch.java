@@ -181,4 +181,20 @@ public class TictactoeMatch extends Match {
 		}
 		return winner;		
 	}
+	
+	public JSONObject toJSON() {
+		JSONObject jso = new JSONObject();
+		jso.put("id", this.getId());
+		jso.put("board", this.getBoard());
+		jso.put("boardOponente", this.getBoardOponente());
+		jso.put("nombre", this.getNombre());
+		jso.put("looser", looser);
+		jso.put("winner", winner);
+		jso.put("owner", this.getOwner());
+		jso.put("players", this.getPlayers());
+		jso.put("playerWithTurn", playerWithTurn);
+		jso.put("ready", this.ready);
+		jso.put("draw", draw);
+		return jso;
+	}
 }

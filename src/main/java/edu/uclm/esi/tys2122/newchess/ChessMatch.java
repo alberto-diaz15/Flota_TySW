@@ -112,4 +112,8 @@ public class ChessMatch extends Match {
 			userRepo.save(winnerAux.get());
 		}*/
 	}
+	
+	public JSONObject toJSON() {
+		return null;
+	}
 }

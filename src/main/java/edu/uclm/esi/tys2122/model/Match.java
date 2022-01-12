@@ -134,5 +134,6 @@ public abstract class Match {
 	public abstract void notifyNewMessage(User userOrigen, String msg);
 
 	public abstract User notifyDisconnected(User user, String string);
-
+	
+	public abstract JSONObject toJSON();
 }

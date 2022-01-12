@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Optional;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,6 +12,8 @@ import edu.uclm.esi.tys2122.dao.UserRepository;
 import edu.uclm.esi.tys2122.model.Board;
 import edu.uclm.esi.tys2122.model.Match;
 import edu.uclm.esi.tys2122.model.User;
+import net.bytebuddy.asm.Advice.This;
+import net.bytebuddy.asm.Advice.This;
 
 public class SinkTheFleetMatch extends Match {
 
@@ -102,24 +105,7 @@ public class SinkTheFleetMatch extends Match {
 				this.getPlayers().get(1) : this.getPlayers().get(0);
 		}
 		return winner;
-		/*
-		if (this.filled() && this.winner==null)
-			this.draw = true;
-		else {
-			this.playerWithTurn = this.getPlayerWithTurn()==this.getPlayers().get(0) ?
-				this.getPlayers().get(1) : this.getPlayers().get(0);
-		}*/
 	}
-	
-	/*private boolean filled() {
-		SinkTheFleetBoard board = (SinkTheFleetBoard) this.getBoard();
-		int[][] squares = board.getSquares();
-		for (int i=0; i<3; i++)
-			for (int j=0; j<3; j++)
-				if (squares[i][j]==0)
-					return false;
-		return true;
-	}*/
 	
 	private int checkPlayer() {
 		if (this.getPlayerWithTurn().getId() == this.getPlayers().get(0).getId()) {
@@ -168,14 +154,16 @@ public class SinkTheFleetMatch extends Match {
 		return draw;
 	}
 	
-	public void notifyMove(int x, int y, boolean hit, Match match) {
+	public void notifyMove(int x, int y, boolean hit, SinkTheFleetMatch match) {
 		JSONObject jso = new JSONObject();
-		// jso.put("board", this.board.toJSON());
+		//jso.put("board", this.board.toJSON());
 		jso.put("type", "move");
 		jso.put("row", x);
 		jso.put("col", y);
 		jso.put("hit", hit);
-		jso.put("match", match);
+		
+		jso.put("match", match.toJSON());
+		
 		for (User player : this.players) {
 			User user = getPlayerWithTurn();
 			if (!player.getId().equals(user.getId()))
@@ -191,7 +179,9 @@ public class SinkTheFleetMatch extends Match {
 	public void notifyNewState(User user, Match match) {
 		JSONObject jso = new JSONObject();
 		jso.put("type", "connected");	
-		jso.put("match", match);
+		
+		jso.put("match", match.toJSON());
+		
 		for (User player : this.players) {
 			if (!player.getId().equals(user.getId()))
 				try {
@@ -264,6 +254,26 @@ public class SinkTheFleetMatch extends Match {
 				}
 		}
 		return winner;		
+	}
+	
+	public JSONObject toJSON() {
+		JSONObject jso = new JSONObject();
+		JSONArray players = new JSONArray();
+		for(int i = 0; i <this.getPlayers().size();i++) {
+			players.put(this.getPlayers().elementAt(i));
+		}
+		jso.put("id", this.getId());
+		jso.put("board", this.getBoard());
+		jso.put("boardOponente", this.getBoardOponente());
+		jso.put("nombre", this.getNombre());
+		jso.put("looser", looser);
+		jso.put("winner", winner);
+		jso.put("owner", this.getOwner());
+		jso.put("players", players);
+		jso.put("playerWithTurn", playerWithTurn);
+		jso.put("ready", this.ready);
+		jso.put("draw", draw);
+		return jso;
 	}
 	
 

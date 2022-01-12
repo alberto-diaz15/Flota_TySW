@@ -68,6 +68,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				success : function(response) {
 					console.log(JSON.stringify(response));
 					self.reload(match)
+					self.error("")
 				},
 				error : function(response) {
 					console.error(response);
@@ -77,32 +78,17 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 			$.ajax(data);
 		}
 		
-		actualizarTablero(x,y){
 			//Preguntar si en barcosMatch puedo quitar el boardLocal ya que no necesito que los board viajen,
 			//aunque quizas en el momento de crear el board si que tiene que ir en la response, en ese caso,
 			//tengo que crear 2 tableros, uno para cada usuario, y luego 2 tableros vacios, esos vacíos, donde los creo
 			//Preguntar tambien, el error en el register cuando no meto ninguna pwd, ni la 1 ni la 2
 			// como usar el validateAccount del userController
 			// Como usar la date de un Token
-			var tablero = document.getElementById("idTabla");
-			var celdas = tablero.getElementsByTagName("td");
-			var i;
-			if(x==0){
-				i=0;
-			}else if(x==1){
-				i=3;
-			}else{
-				i=6;
-			}
-			i =+y;
-			celdas[i].textContent = 1 //en caso de jugador 1 o poner un 0 en caso de jugador 2
-		}
 
 		conectarAWebSocket() {
 			let self = this
 			let ws = new WebSocket("ws://localhost:8080/wsGenerico");
 			ws.onopen = function(event) {
-				alert("Conexión establecida");
 			}
 			ws.onmessage = function(event) {
 				let msg = JSON.parse(event.data);
@@ -110,7 +96,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					if(msg.hit == true){
 						alert("Barco golpeado!");
 					}
-					self.reload(match)
+					self.reload(msg.match)
 				}else if(msg.type == "msg"){
 					alert("Me llega el mensaje del chat");
 					var message = document.createElement("span")
@@ -125,7 +111,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					chat.appendChild(message);
 					chat.appendChild(document.createElement("br"))
 				}else if( msg.type == "connected"){
-					self.reload(match)
+					self.reload(msg.match)
 
 				}
 
@@ -159,6 +145,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					chat.appendChild(message);
 					chat.appendChild(document.createElement("br"))
 					console.log(JSON.stringify(response));
+					self.error("")
 				},
 				error : function(response) {
 					console.error(response);
@@ -188,14 +175,13 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 							}
 						}
 					}
-					
 					if (game.name=="Tres en raya")
 						match = new TERMatch("Tres en raya", response)
 					else
 						match = new BarcosMatch("Hundir la flota", response)
 					self.matches.push(match);
 					self.conectarAWebSocket();
-
+					self.error("")
 					console.log(self.user);
 					console.log(JSON.stringify(response));
 				},
@@ -221,6 +207,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				contentType : "application/json",
 				success : function(response) {
 					console.log(JSON.stringify(response));
+					self.error("")
 				},
 				error : function(response) {
 					console.error(response);
@@ -240,12 +227,13 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					for (let i=0; i<self.matches().length; i++)
 						if (self.matches()[i].id==match.id) {
 							response.id = match.id
-							match = new BarcosMatch("Hundir la flota",response)
+							match = new BarcosMatch("Hundir la flota",response);
 							match.checkBoard(response);
 							self.matches.splice(i, 1, match);
 							break;
 						}
 					console.log(JSON.stringify(response));
+					self.error("")
 				},
 				error : function(response) {
 					console.error(response.responseJSON.message);
@@ -273,6 +261,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 						contentType : "application/json",
 						success : function(response) {
 							console.log(JSON.stringify(response));
+							self.error("")
 						},
 						error : function(response) {
 							console.error(response);
