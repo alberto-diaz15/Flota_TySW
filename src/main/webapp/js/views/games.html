@@ -2,6 +2,7 @@
 	<div class="oj-applayout-fixed-top">
 		<header role="banner" class="oj-hybrid-applayout-header">
 			<oj-module config="[[headerConfig]]"></oj-module>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		</header>
 	</div>
 
@@ -9,17 +10,23 @@
 		<div role="main" class="oj-hybrid-applayout-content">
 			<div class="oj-hybrid-padding">
 				<h1>Juegos disponibles</h1>
-				<div>
-					<span data-bind="html : error" style="color: red"></span>
+				
+				<div id="cont_juegos">
 					<!-- ko foreach : games -->
-					<div>
+					<div id="juegos">
 						<label data-bind="html : name"></label>&nbsp;
-						<button
-							data-bind="click : function() { $parent.joinGame($data); }">Jugar
-							partida</button>
+						<button id="btnJugar" data-bind="click : function() { $parent.joinGame($data); }">Jugar partida</button>
 					</div>
 					<!-- /ko -->
 				</div>
+				
+				<div class="oj-flex">
+	            	<div class="oj-sm-12">
+	            		<span data-bind="html : error" style="color: red"></span>
+	            		<br>
+	            		<a data-bind="click : function() { logout() }">Cerrar Sesion</a>
+	            	</div>
+	            </div>
 
 				<ol>
 					<!-- ko foreach : matches -->
@@ -163,8 +170,10 @@
 							</div>
 
 							<div>
-								Acab� en empate: <span data-bind="html : draw"></span>
+								Acabó en empate: <span data-bind="html : draw"></span>								
 							</div>
+							<span id="breaker">================================================================</span>
+							
 							<br><br><br><br><br><br>
 						</div>
 						
@@ -180,93 +189,105 @@
 					</div>
 					</li>
 					<!-- /ko -->
-
 				</ol>
-	            <div class="oj-flex">
-	            	<div class="oj-sm-12">
-	            		
-	            		<br>
-	            		<a data-bind="click : function() { logout() }">Cerrar Sesion</a>
-	            	</div>
-	            </div>
-				<style>
-				
-					.chat{
-					position: fixed;
-					bottom: 70px;
-					right: 50px;
-					margin: 0;
-					}
-					.chatBox {
-					    text-align: left;
-					    margin: 0 auto;
-					    margin-top: 10px;
-					    margin-bottom: 25px;
-					    padding: 10px;
-					    background: #fff;
-					    height: 100px;
-					    width: 300px;
-					    border: 1px solid #a7a7a7;
-					    overflow: auto;
-					    border-radius: 4px;
-					  }
-					  
-					#chatForm{
-						max-width: 322px;
-						margin-top:-20px;
-						text-align: center;
-					}
-				
-					#allbox{
-					float: left;
-					min-width: 90%;
-					}
 
-					.header {
-						display: flex;
-					}
-					
-					.tab_loc {
-						float: left;
-						margin-right: 10%;
-						margin-bottom: 10px;
-					}
-					
-					.resultado {
-						margin-top: 15px;
-						text-align: left;
-						float: left;
-					}
-					
-					.datos {
-						float: left;
-						margin-right: 20%;
-					}
-					
-					.mov {
-						padding-top: 1px;
-						margin-bottom: 23px;
-						margin-right: -10px;
-					}
-								
-					.resultado{
-						width: 90%;
-					}
-					
-					@media screen and (max-width: 865px) {				
-						.mov {
-							margin-right: 50%;
-							margin-bottom: 10px;
-						}
-
-						.tab_op {
-						float: left;
-						margin-right: 100px;
-						}
-						
-					}
-				</style>
 			</div>
 		</div>
 	</div>
 </div>
+      
+<style>
+	#cont_juegos{
+		float: left;
+		margin-right: 10%;
+	}
+	
+	#juegos{
+		width: 210px;
+		padding-bottom: 5px;
+	}
+	#btnJugar{
+		float: right;
+	}
+	
+	#breaker{
+		width: 90%;
+	}
+	
+	.chat{
+		position: fixed;
+		bottom: 70px;
+		right: 50px;
+		margin: 0;
+	}
+	
+	.chatBox {
+	    text-align: left;
+	    margin: 0 auto;
+	    margin-top: 10px;
+	    margin-bottom: 25px;
+	    padding: 10px;
+	    background: #fff;
+	    height: 100px;
+	    width: 300px;
+	    border: 1px solid #a7a7a7;
+	    overflow: auto;
+	    border-radius: 4px;
+	  }
+	  
+	#chatForm{
+		max-width: 322px;
+		margin-top:-20px;
+		text-align: center;
+	}
+
+	#allbox{
+		margin-top:20px;
+		float: left;
+		min-width: 90%;
+	}
+
+	.header {
+		display: flex;
+	}
+	
+	.tab_loc {
+		float: left;
+		margin-right: 10%;
+		margin-bottom: 10px;
+	}
+	
+	.resultado {
+		max-height: 100px;
+		margin-top: 15px;
+		text-align: left;
+		float: left;
+	}
+	
+	.datos {
+		float: left;
+		margin-right: 14%;
+	}
+	
+	.mov {
+		padding-top: 1px;
+		margin-bottom: 23px;
+		margin-right: -10px;
+	}
+				
+	.resultado{
+		width: 90%;
+	}
+	
+	@media screen and (max-width: 865px) {				
+		.mov {
+			margin-right: 50%;
+			margin-bottom: 10px;
+		}
+
+		.tab_op {
+			float: left;
+			margin-right: 100px;
+		}
+	}
+</style>

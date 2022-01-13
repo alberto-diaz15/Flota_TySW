@@ -2,24 +2,28 @@
   <div class="oj-applayout-fixed-top">
     <header role="banner" class="oj-hybrid-applayout-header">
       <oj-module config="[[headerConfig]]"></oj-module>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     </header>
   </div>
   <!-- This is where your main page content will be loaded -->
   <div class="oj-applayout-content">
-    <div role="main" class="oj-hybrid-applayout-content">
+    <div id="content" role="main" class="oj-hybrid-applayout-content">
       <div class="oj-hybrid-padding">
-        <h1>Login</h1>
+        <h1>Iniciar sesión</h1>
         <div>
             <div class="oj-flex">
             	<div class="oj-sm-12">
-            		<input type="text" placeholder="Nombre de usuario" data-bind="value : userName">
+            		<span>Usuario:</span><br>
+            		<input id="tbox" type="text" placeholder="Nombre de usuario" data-bind="value : userName">
             	</div>
             	<div class="oj-sm-12">
-            		<input type="password" placeholder="Contraseña" data-bind="value : pwd">
+            		<span>Contraseña:</span><br>
+            		<input id="tbox" type="password" placeholder="Contraseña" data-bind="value : pwd">
             	</div>
-            	<div class="oj-sm-12">
+            	<div id="btnEntrar" class="oj-sm-12">
             		<button data-bind="click : function() { login() } ">Entrar</button>
             	</div>
+            	
             	<div id="zonaGoogle"></div>
             	
             	<div class="oj-sm-12" data-bind="html : message" style="color : blue">
@@ -27,7 +31,7 @@
             	<div class="oj-sm-12" data-bind="html : error" style="color : red">
             	</div>
             </div>
-            
+            <br>
             <div class="oj-flex">
             	<div class="oj-sm-12">
             		<a data-bind="click : function() { restore() }">Recuperar contraseña</a>
@@ -43,6 +47,43 @@
     </div>
   </div>
 </div>
+
+<style>
+*{
+ 	font-size: 104%;
+}
+
+#content{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:auto;
+    margin-bottom:auto;
+    height:75vh;
+}
+
+
+#tbox{
+	margin-bottom: 10px;
+}
+
+#btnEntrar{
+	margin-top: 10px;
+	width: 20px;
+	height: 16px;
+	text-align: right;
+}
+
+#zonaGoogle{
+	margin-top: 40px;
+	margin-left: auto;
+	margin-right: auto;	
+}
+
+.oj-flex{
+	max-width: 308px;
+}
+</style>
 
 <script>
 function renderButton() {
