@@ -178,7 +178,6 @@ public class SinkTheFleetMatch extends Match {
 	public void notifyNewState(User user, Match match) {
 		JSONObject jso = new JSONObject();
 		jso.put("type", "connected");	
-		
 		jso.put("match", match.toJSON());
 		
 		for (User player : this.players) {

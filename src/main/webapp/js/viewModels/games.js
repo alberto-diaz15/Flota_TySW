@@ -5,7 +5,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		constructor() {
 			let self = this;
 			
-			self.userName = ko.observable("");
+			self.userName = "";
 			self.games = ko.observableArray([]);
 			self.matches = ko.observableArray([]);
 
@@ -40,7 +40,6 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 			}else{
 				self.userName = "No has iniciado sesion"
 			}
-
 			let data = {
 				type : "get",
 				url : "/games/getGames",
@@ -136,6 +135,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				data : JSON.stringify(info),
 				contentType : "application/json",
 				success : function(response) {
+					
 					var message = document.createElement("span")
 					var nombre = ""
 					for (var i=0; i<response.players.length; i++){
@@ -187,6 +187,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 						match = new BarcosMatch("Hundir la flota", response)
 					self.matches.push(match);
 					self.conectarAWebSocket();
+					self.sendConnected(match);
 					self.error("")
 					console.log(self.user);
 					console.log(JSON.stringify(response));

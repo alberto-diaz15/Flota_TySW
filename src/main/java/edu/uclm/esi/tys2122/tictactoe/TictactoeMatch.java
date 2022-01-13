@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Optional;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -122,11 +123,11 @@ public class TictactoeMatch extends Match {
 		return draw;
 	}
 
-	@Override
+
 	public void notifyNewState(User user, Match match) {
 		JSONObject jso = new JSONObject();
 		jso.put("type", "connected");	
-		jso.put("match", match);
+		jso.put("match", match.toJSON());
 		for (User player : this.players) {
 			if (!player.getId().equals(user.getId()))
 				try {
@@ -184,6 +185,10 @@ public class TictactoeMatch extends Match {
 	
 	public JSONObject toJSON() {
 		JSONObject jso = new JSONObject();
+		JSONArray players = new JSONArray();
+		for(int i = 0; i <this.getPlayers().size();i++) {
+			players.put(this.getPlayers().elementAt(i));
+		}
 		jso.put("id", this.getId());
 		jso.put("board", this.getBoard());
 		jso.put("boardOponente", this.getBoardOponente());
@@ -191,7 +196,7 @@ public class TictactoeMatch extends Match {
 		jso.put("looser", looser);
 		jso.put("winner", winner);
 		jso.put("owner", this.getOwner());
-		jso.put("players", this.getPlayers());
+		jso.put("players", players);
 		jso.put("playerWithTurn", playerWithTurn);
 		jso.put("ready", this.ready);
 		jso.put("draw", draw);

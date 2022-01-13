@@ -121,20 +121,17 @@ public class UserService {
 	}
 
 	public void insertLogin(User user, String ip, Cookie cookie) {
+		Login login;
 		try {
-			Login login = loginDAO.findByEmail(user.getEmail());
-			if(login == null) {
-				login = new Login();
-			}
-			login.setEmail(user.getEmail());
-			login.setDate(System.currentTimeMillis());
-			login.setIp(ip);
-			login.setCookieValue(cookie.getValue());
-			loginDAO.save(login);
+			 login = loginDAO.findByEmail(user.getEmail());
 		}catch(Exception e){
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Login " + user.getEmail() + " no encontrado"+e.getMessage());
+			login = new Login();
 		}
-
+		login.setEmail(user.getEmail());
+		login.setDate(System.currentTimeMillis());
+		login.setIp(ip);
+		login.setCookieValue(cookie.getValue());
+		loginDAO.save(login);
 	}
 
 	public User findUser(String userId) {
