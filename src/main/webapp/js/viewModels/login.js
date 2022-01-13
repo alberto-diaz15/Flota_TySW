@@ -28,7 +28,11 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				url : "/user/heLlegado",
 				type : "get",
 				success : function(response) {
-					app.router.go( { path : response } )
+					if(response != ''){
+						app.router.go( { path : "games"} )
+						sessionStorage.setItem("userName", response.name)
+						sessionStorage.setItem("userId",response.id)	
+					}
 				}
 			});
 		}
@@ -57,6 +61,7 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				type : "post",
 				contentType : 'application/json',
 				success : function(response, a, b) {
+					sessionStorage.setItem("userName", response.name)
 					app.router.go( { path : "games"} );
 				},
 				error : function(response) {

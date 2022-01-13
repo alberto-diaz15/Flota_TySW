@@ -53,7 +53,7 @@ public class TictactoeMatch extends Match {
 
 	@Override
 	public User move(String userId, JSONObject jsoMovimiento) throws Exception {
-		if (this.filled())
+		if (this.filled() || winner != null)
 			throw new Exception("La partida ya terminó");
 		
 		if (!this.getPlayerWithTurn().getId().equals(userId))

@@ -81,7 +81,6 @@ public class SinkTheFleetMatch extends Match {
 			throw new Exception("Casilla ocupada");
 		
 
-		//int value = this.getPlayerWithTurn()==this.getPlayers().get(0) ? 1 : 2;
 		int value = 0;
 		boolean hit = checkHit(x,y, player);
 		if(hit) {

@@ -46,34 +46,51 @@ public class UserController extends CookiesController {
 	private TokenRepository tokenRepo;
 	
 	@GetMapping("/heLlegado")
-	public String heLlegado(HttpServletRequest request, HttpServletResponse response) {
+	public User heLlegado(HttpServletRequest request, HttpServletResponse response) {
 		Cookie cookie = super.findCookie(request.getCookies());
 		if (cookie!=null) {
 			super.incrementarContador(request, response);
 			User user = userDAO.findByCookie(cookie.getValue());
 			if (user!=null) {
 				userService.insertLogin(user, request.getRemoteAddr(), cookie);
+				userService.doLogin(user.getName(), user.getPwd(), request.getRemoteAddr());
 				request.getSession().setAttribute("userId", user.getId());
 				request.getSession().setAttribute("user", user);
-
-				return "games";
+				
+				return user;
 			}
 		}
 		return null;
 	}
+	@PostMapping(value = "/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
+		JSONObject jso = new JSONObject(credenciales);
+		Cookie cookie = super.findCookie(request.getCookies());
+		if (cookie!=null) {
+			User user = userDAO.findByCookie(cookie.getValue());
+			if (user!=null) {
+				user.setCookie(COOKIE_NAME);
+				userService.doLogout(jso.optString("userName"));
+				request.getSession().removeAttribute("userId");
+				request.getSession().removeAttribute("user");
+				return "login";
+			}
+		}
+		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No has iniciado sesion");
+	}
 	
 	@PostMapping(value = "/login")
-	public void login(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
+	public User login(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
 		JSONObject jso = new JSONObject(credenciales);
 		if(jso.optString("origen").length()>0) {
-			loginDeOtro(request,response,jso,credenciales);
+			return loginDeOtro(request,response,jso,credenciales);
 		}else {
-			loginClasico(request, response, jso);
+			return loginClasico(request, response, jso);
 
 		}
 	}
 
-	private void loginDeOtro(HttpServletRequest request, HttpServletResponse response, JSONObject jso,@RequestBody Map<String, Object> credenciales) {
+	private User loginDeOtro(HttpServletRequest request, HttpServletResponse response, JSONObject jso,@RequestBody Map<String, Object> credenciales) {
 		String name = jso.getString("name");
 		String email = jso.getString("email");
 		String googleId = jso.getString("googleId");
@@ -88,7 +105,6 @@ public class UserController extends CookiesController {
 			userService.insertLogin(user, ip, cookies[0]);
 			request.getSession().setAttribute("userId", user.getId());
 			request.getSession().setAttribute("user", user);
-
 		}else {
 			registerGoogle(credenciales);
 			user = userService.doLoginGoogle(googleId);
@@ -99,11 +115,11 @@ public class UserController extends CookiesController {
 			userService.insertLogin(user, ip, cookies[0]);
 			request.getSession().setAttribute("userId", user.getId());
 			request.getSession().setAttribute("user", user);
-
 		}
+		return user;
 	}
 
-	private void loginClasico(HttpServletRequest request, HttpServletResponse response, JSONObject jso) throws NoSuchAlgorithmException {
+	private User loginClasico(HttpServletRequest request, HttpServletResponse response, JSONObject jso) throws NoSuchAlgorithmException {
 		String name = jso.getString("name");
 		String pwd = jso.getString("pwd");
 		String ip = request.getRemoteAddr();
@@ -118,7 +134,7 @@ public class UserController extends CookiesController {
 		userService.insertLogin(user, ip, cookies[0]);
 		request.getSession().setAttribute("userId", user.getId());
 		request.getSession().setAttribute("user", user);
-
+		return user;
 	}
 
 	@PostMapping(value = "/sendRestorePwd")	

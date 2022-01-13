@@ -4,8 +4,8 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 	class MenuViewModel {
 		constructor() {
 			let self = this;
-			self.user;
-
+			
+			self.userName = ko.observable("");
 			self.games = ko.observableArray([]);
 			self.matches = ko.observableArray([]);
 
@@ -32,10 +32,14 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		}
 
 		connected() {
+			let self = this;
 			accUtils.announce('Juegos.');
 			document.title = "Juegos";
-
-			let self = this;
+			if(sessionStorage.getItem("userName") != null){
+				self.userName = sessionStorage.getItem("userName");
+			}else{
+				self.userName = "No has iniciado sesion"
+			}
 
 			let data = {
 				type : "get",
@@ -166,7 +170,9 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					
 					if(response.players.length == 1){
 						self.user= response.owner.id
+						self.userName = response.owner.name
 						sessionStorage.setItem("User", self.user)
+						sessionStorage.setItem("userName", self.user)
 					}else{
 						for(var i = 0; i<response.players.length;i++ ){
 							if(response.players[i] != response.owner.id){
@@ -216,6 +222,32 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 			}
 			$.ajax(data);
 		}
+		
+		logout(){
+			let self = this
+			
+			let info = {
+				userName: self.userName
+			};
+
+			let data = {
+				type : "post",
+				url : "/games/logout",
+				data : JSON.stringify(info),
+				contentType : "application/json",
+				success : function(response) {
+					console.log(JSON.stringify(response));
+					//depende de lo que devuelva, hace el app.router o no
+					app.router.go( { path : "login"} );
+					self.error("")
+				},
+				error : function(response) {
+					console.error(response);
+					self.error(response.responseJSON.message);
+				}
+			}
+			$.ajax(data);
+		}
 
 		reload(match) {
 			let self = this;
@@ -227,7 +259,11 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 					for (let i=0; i<self.matches().length; i++)
 						if (self.matches()[i].id==match.id) {
 							response.id = match.id
-							match = new BarcosMatch("Hundir la flota",response);
+							if(response.nombre == "Hundir la flota"){
+								match = new BarcosMatch("Hundir la flota",response);
+							}else{
+								match = new TERMatch("Tres en raya", response);
+							}
 							match.checkBoard(response);
 							self.matches.splice(i, 1, match);
 							break;

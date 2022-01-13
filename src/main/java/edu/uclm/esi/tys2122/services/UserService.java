@@ -38,8 +38,9 @@ public class UserService {
 	}
 
 	public User doLogin(String name, String pwd, String ip) {
-		pwd = org.apache.commons.codec.digest.DigestUtils.sha512Hex(pwd);
-		
+		if(pwd.length() < 128) {
+			pwd = org.apache.commons.codec.digest.DigestUtils.sha512Hex(pwd);
+		}
 		User user = userRepo.findByNameAndPwd(name, pwd);
 		if (user==null) //  || user.getConfirmationDate()==null)
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
@@ -47,6 +48,28 @@ public class UserService {
 		this.connectedUsers.put(user.getId(), user);
 		return user;
 	}
+	
+	public User doLogout(String name) {		
+		Optional<User> user = userRepo.findByName(name);
+		if (user.isEmpty()) //  || user.getConfirmationDate()==null)
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No has iniciado sesion");
+		User userLogout;
+		if((userLogout =this.connectedUsers.remove(user.get().getId())) == null)
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No has iniciado sesion");
+		String cookie = " ";
+		while(true) {
+			try {
+				cookie += " ";
+				userLogout.setCookie(cookie);
+				userRepo.save(userLogout);
+				return userLogout;
+			}catch(Exception e) {
+				
+			}
+		}
+
+	}
+	
 	public User doLoginGoogle(String userId) {		
 		Optional<User> user = userRepo.findById(userId);
 		if (user.isEmpty()) //  || user.getConfirmationDate()==null)
@@ -98,12 +121,20 @@ public class UserService {
 	}
 
 	public void insertLogin(User user, String ip, Cookie cookie) {
-		Login login = new Login();
-		login.setEmail(user.getEmail());
-		login.setDate(System.currentTimeMillis());
-		login.setIp(ip);
-		login.setCookieValue(cookie.getValue());
-		loginDAO.save(login);
+		try {
+			Login login = loginDAO.findByEmail(user.getEmail());
+			if(login == null) {
+				login = new Login();
+			}
+			login.setEmail(user.getEmail());
+			login.setDate(System.currentTimeMillis());
+			login.setIp(ip);
+			login.setCookieValue(cookie.getValue());
+			loginDAO.save(login);
+		}catch(Exception e){
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Login " + user.getEmail() + " no encontrado"+e.getMessage());
+		}
+
 	}
 
 	public User findUser(String userId) {

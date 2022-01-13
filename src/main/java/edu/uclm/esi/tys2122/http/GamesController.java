@@ -1,10 +1,14 @@
 package edu.uclm.esi.tys2122.http;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
@@ -66,12 +70,14 @@ public class GamesController extends CookiesController {
 		if(match.getOwner() == null) {
 			match.setOwner(user);
 		}
-		if(match.getBoard().getPlayer() == null && match.getOwner().getId().equals(user.getId())) {
-			match.getBoard().setPlayer(user);
-		}else if(match.getBoardOponente().getPlayer() == null){
-			match.getBoardOponente().setPlayer(user);
+		if(gameName.equals("Hundir la flota")) {
+			if(match.getBoard().getPlayer() == null && match.getOwner().getId().equals(user.getId())) {
+				match.getBoard().setPlayer(user);
+			}else if(match.getBoardOponente().getPlayer() == null){
+				match.getBoardOponente().setPlayer(user);
+			}
 		}
-		
+
 		if (match.isReady()) {
 			game.getPendingMatches().remove(match);
 			game.getPlayingMatches().add(match);
@@ -79,6 +85,33 @@ public class GamesController extends CookiesController {
 		match.notifyNewState(user, match);
 		gamesService.put(match);
 		return match;
+	}
+	
+	@PostMapping(value = "/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> credenciales) throws NoSuchAlgorithmException {
+		JSONObject jso = new JSONObject(credenciales);
+		Cookie cookie = super.findCookie(request.getCookies());
+		if (cookie!=null) {
+			User user = userRepo.findByCookie(cookie.getValue());
+			if (user!=null) {
+				String cookieAux = COOKIE_NAME;
+				while(true) {
+					try {
+						cookieAux+= cookieAux+" ";
+						user.setCookie(cookieAux);
+						userRepo.save(user);
+						userService.doLogout(jso.optString("userName"));
+						request.getSession().removeAttribute("userId");
+						request.getSession().removeAttribute("user");
+						return "login";	
+					}catch(Exception e) {
+						
+						
+					}	
+				}
+			}
+		}
+		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No has iniciado sesion");
 	}
 	
 	@PostMapping("/move")

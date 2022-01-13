@@ -10,10 +10,11 @@
  */
 define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		'jquery' ], function(ko, app, moduleUtils, accUtils, $) {
-
+	
 	function RegisterViewModel() {
 		var self = this;
-		
+		self.user = "";
+		self.userId = "";
 		self.userName = ko.observable("pepe");
 		self.email = ko.observable("pepe@pepe.com");
 		self.pwd1 = ko.observable("pepe123");
@@ -30,6 +31,31 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 				self.picture ("data:image/png;base64," + btoa(reader.result));
 			}
 			reader.readAsBinaryString(file);
+		}
+		
+		self.logout = function(){
+			
+			let info = {
+				userName: user
+			};
+
+			let data = {
+				type : "post",
+				url : "/user/logout",
+				data : JSON.stringify(info),
+				contentType : "application/json",
+				success : function(response) {
+					console.log(JSON.stringify(response));
+					//depende de lo que devuelva, hace el app.router o no
+					app.router.go( { path : "login"} );
+					self.error("")
+				},
+				error : function(response) {
+					console.error(response);
+					self.error(response.responseJSON.message);
+				}
+			}
+			$.ajax(data);
 		}
 		
 		self.register = function() {
@@ -74,6 +100,11 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		self.connected = function() {
 			accUtils.announce('Register page loaded.');
 			document.title = "Registro";
+			if(sessionStorage.getItem("userName") != null){
+				self.user = sessionStorage.getItem("userName")
+			}else{
+				self.user = "No has iniciado sesion"
+			}			
 			// Implement further logic if needed
 		};
 
