@@ -2,6 +2,7 @@ package edu.uclm.esi.tys2122.sinkthefleet;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.InputMismatchException;
 import java.util.Optional;
 
 import org.json.JSONArray;
@@ -73,9 +74,18 @@ public class SinkTheFleetMatch extends Match {
 		
 		if (!this.getPlayerWithTurn().getId().equals(userId))
 			throw new Exception("No es tu turno");
-		
-		Integer x = jsoMovimiento.getInt("x");
-		Integer y = jsoMovimiento.getInt("y");
+		Integer x;
+		Integer y;
+		try {
+			x = jsoMovimiento.getInt("x");
+			y = jsoMovimiento.getInt("y");
+			if((x <0 || x>5) || (y<0 || y>5)) {
+				throw new Exception("Casilla no válida. Solo valores entre 0 y 5");
+			}
+		}catch(InputMismatchException e){
+			throw new Exception("Casilla no válida. Solo valores entre 0 y 5");
+		}
+
 		int player = checkPlayer();
 		if (this.getSquare(x, y,player)==3 || this.getSquare(x, y,player)==2)
 			throw new Exception("Casilla ocupada");
