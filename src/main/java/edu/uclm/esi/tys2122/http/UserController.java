@@ -182,6 +182,7 @@ public class UserController extends CookiesController {
 		userService.save(user);
 		//userService.doRestore(userName, user.getEmail(), ip);
 	}
+	
 	@PutMapping("/register")
 	@ResponseBody
 	public String register(@RequestBody Map<String, Object> credenciales) {
@@ -220,6 +221,7 @@ public class UserController extends CookiesController {
 
 		return "We have sent you an email to confirm your registration";
 	}
+	
 	public String registerGoogle(@RequestBody Map<String, Object> credenciales) {
 		JSONObject jso = new JSONObject(credenciales);
 		String userName = jso.optString("name");
@@ -242,8 +244,7 @@ public class UserController extends CookiesController {
 		    }
 		    return "Error, ese usuario ya existe";
 		}
-
-		return "We have sent you an email to confirm your registration";
+		return "Cuenta creada correctamente";
 	}	
 	@DeleteMapping("/remove/{userId}")
 	public void remove(@PathVariable String userId) {
@@ -258,9 +259,6 @@ public class UserController extends CookiesController {
 		System.out.println(tokenId);
 		try {
 			response.sendRedirect(Manager.get().getConfiguration().getString("home"));
-		} catch (IOException e) {
-			
-		}
+		} catch (IOException e) {}
 	}
-
 }
