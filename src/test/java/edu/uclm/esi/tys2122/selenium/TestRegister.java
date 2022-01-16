@@ -49,7 +49,7 @@ public class TestRegister {
 		jugador.findElement(By.id("ui-id-5")).click();
 		pausa(1000);
 		jugador.findElement(By.id("tbUsuario")).clear();
-		jugador.findElement(By.id("tbUsuario")).sendKeys("auto"+ (Math.floor(Math.random() * (99-0+1))));
+		jugador.findElement(By.id("tbUsuario")).sendKeys("auto"+ (Math.random() * (99-0)));
 		pausa(500);
 		jugador.findElement(By.id("tbEmail")).clear();
 		jugador.findElement(By.id("tbEmail")).sendKeys("autotysweb@yopmail.com");
