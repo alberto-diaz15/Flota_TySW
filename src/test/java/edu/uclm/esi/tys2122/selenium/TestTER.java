@@ -67,71 +67,102 @@ public class TestTER {
 		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/div[2]/button[2]")).click();
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/div[2]/button[2]")).click();
 		pausa(2000);
-		jugador.findElement(By.id("btnMover")).click();
-		pausa(2000);
 		
-		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("-1");
-		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("-1");
-		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/button[1]")).click();
+		/*Control de excepciones*/
+		jugador.findElement(By.id("btnMover")).click();
 		pausa(1000);
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("-1");
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("-1");
-		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/button[1]")).click();
+		oponente.findElement(By.id("btnMover")).click();
 		pausa(1000);
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
-		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("0");
-		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("0");
-		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/button[1]")).click();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("1");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("1");
+		oponente.findElement(By.id("btnMover")).click();
 		pausa(1000);
 		
+		/*Ganador y perdedor*/
 		for (int i=0; i<3; i++) {
 			jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
 			jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
 			jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("0");
 			jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys(Integer.toString(i));
-			jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/button[1]")).click();
+			jugador.findElement(By.id("btnMover")).click();
 			pausa(1000);
 			oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
 			oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
 			oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("2");
 			oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys(Integer.toString(i));
-			oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/button[1]")).click();
-			pausa(5000);
+			oponente.findElement(By.id("btnMover")).click();
+			pausa(1000);
 		}
-	}
-	
-	/*
-	public void unirseAPartida() {
-		driverPepe.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/div/div[1]/button")).click();
+		pausa(5000);
 		
-		driverAnonimo.findElement(By.xpath("/html/body/div/div[2]/div/oj-navigation-list/div/div/ul/li[5]/a")).click();
-		driverAnonimo.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/div/div[1]/button")).click();
-		
-		jugar();
+		jugador.navigate().refresh();
+		pausa(500);
+		oponente.navigate().refresh();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/div/div[1]/button[1]")).click();
+		pausa(1000);
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/div/div[1]/button[1]")).click();
+		pausa(2000);
+			
+		/*Empate*/
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("0");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("0");
+		oponente.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("0");
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("2");
+		jugador.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("0");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("1");
+		oponente.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("1");
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("0");
+		jugador.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("1");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("2");
+		oponente.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("1");
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("1");
+		jugador.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("2");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("0");
+		oponente.findElement(By.id("btnMover")).click();
+		pausa(1000);
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("2");
+		jugador.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("1");
+		jugador.findElement(By.id("btnMover")).click();
+		pausa(1000);			
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("2");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("2");
+		oponente.findElement(By.id("btnMover")).click();
+		pausa(5000);	
 	}
-	
-	private void jugar() {
-		driverPepe.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/button[2]")).click();
-		driverAnonimo.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/button[2]")).click();
-		
-		pausa(300);
-		
-		WebElement jctPepe = driverPepe.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/div[4]/span"));
-		String nombreJCT = jctPepe.getText();
-		
-		WebDriver djct = nombreJCT.equals("pepe") ? driverPepe : driverAnonimo;
-	}
-
-	private WebDriver cambiarTurno(WebDriver driver) {
-		return driver==driverPepe ? driverAnonimo : driverPepe;
-	}
-
-	private void recargar() {
-		driverPepe.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/button[2]")).click();
-		driverAnonimo.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]/div/div/ol/li/button[2]")).click();
-	}
-	*/
 	
 	@AfterAll
 	public static void tearDown() {
