@@ -118,7 +118,17 @@ define([ 'knockout', 'appController', 'ojs/ojmodule-element-utils', 'accUtils',
 		};
 
 		disconnected() {
-			// Implement if needed
+			 if(!gapi.auth2){
+			    gapi.load('auth2', function() {
+			        gapi.auth2.init();
+			    });
+			 }
+		    var auth2 = gapi.auth2.getAuthInstance();
+		    auth2.signOut().then(function () {
+		        auth2.disconnect();
+		    });
+
+
 		};
 
 		transitionCompleted() {
