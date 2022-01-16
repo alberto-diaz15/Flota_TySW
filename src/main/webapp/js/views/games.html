@@ -67,7 +67,7 @@
 							<input data-bind="value : $parent.x" type="number" size="1" placeholder="X"> 
 							<br> 
 							<input data-bind="value : $parent.y" type="number" size="1" placeholder="Y">
-							<button data-bind="click : function() { $parent.mover($data); }">Mover</button>
+							<button id="btnMover" data-bind="click : function() { $parent.mover($data); }">Mover</button>
 							<br>
 							<button data-bind="click : function() { $parent.reload($data); }">Recargar partida</button>
 						</div>

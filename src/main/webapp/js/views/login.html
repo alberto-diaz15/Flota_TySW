@@ -14,14 +14,14 @@
             <div class="oj-flex">
             	<div class="oj-sm-12">
             		<span>Usuario:</span><br>
-            		<input id="tbox" type="text" placeholder="Nombre de usuario" data-bind="value : userName">
+            		<input id="tbUsuario" type="text" placeholder="Nombre de usuario" data-bind="value : userName">
             	</div>
             	<div class="oj-sm-12">
             		<span>Contraseña:</span><br>
-            		<input id="tbox" type="password" placeholder="Contraseña" data-bind="value : pwd">
+            		<input id="tbPasswd" type="password" placeholder="Contraseña" data-bind="value : pwd">
             	</div>
             	<div id="btnEntrar" class="oj-sm-12">
-            		<button data-bind="click : function() { login() } ">Entrar</button>
+            		<button id="entrar" data-bind="click : function() { login() } ">Entrar</button>
             	</div>
             	
             	<div id="zonaGoogle"></div>
@@ -63,7 +63,7 @@
 }
 
 
-#tbox{
+#tbUsuario, #tbPasswd{
 	margin-bottom: 10px;
 }
 
