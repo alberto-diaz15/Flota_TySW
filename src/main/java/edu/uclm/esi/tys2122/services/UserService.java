@@ -127,6 +127,9 @@ public class UserService {
 		}catch(Exception e){
 			login = new Login();
 		}
+		if(login == null) {
+            login = new Login();
+        }
 		login.setEmail(user.getEmail());
 		login.setDate(System.currentTimeMillis());
 		login.setIp(ip);
