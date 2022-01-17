@@ -73,13 +73,14 @@ public class TestHLF {
 		pausa(1000);
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).clear();
 		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).clear();
-		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("1");
-		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("1");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[1]")).sendKeys("5");
+		oponente.findElement(By.xpath("/html/body/div/oj-module/div[1]/div[2]//div/div/ol/li/div[2]/input[2]")).sendKeys("5");
 		oponente.findElement(By.id("btnMover")).click();
 		pausa(2000);
 		
 		int cont_j=0, cont_o=0;
 		boolean salir=false;
+		
 		/*Ganador y perdedor*/
 		for (int i=0; i<6; i++) {
 			for (int j=0; j<6; j++) {
@@ -126,8 +127,6 @@ public class TestHLF {
 	public static void tearDown() {
 		jugador.quit();
 		oponente.quit();
-		//driverAnonimo.quit();
-		//userDao.deleteAll();
 	}
 
 	private void pausa(long millis) {
@@ -139,4 +138,3 @@ public class TestHLF {
 		}		
 	}
 }
-

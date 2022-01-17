@@ -219,7 +219,7 @@ public class UserController extends CookiesController {
 		    return "Error, ese usuario ya existe";
 		}
 
-		return "We have sent you an email to confirm your registration";
+		return "Cuenta creada correctamente";
 	}
 	
 	public String registerGoogle(@RequestBody Map<String, Object> credenciales) {

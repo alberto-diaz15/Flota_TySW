@@ -1,6 +1,5 @@
 package edu.uclm.esi.tys2122.selenium;
 
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
@@ -39,9 +38,6 @@ public class TestTER {
 		
 		System.setProperty("webdriver.chrome.driver", userHome + "chromedriver/chromedriver.exe");
 		
-		//jugador= new ChromeDriver();
-		//jugador.manage().window().maximize();
-		//jugador.get("http://localhost:8080");
 		jugador = crearDriver(0, 0);
 		oponente = crearDriver(950, 0);
 	}
@@ -168,8 +164,6 @@ public class TestTER {
 	public static void tearDown() {
 		jugador.quit();
 		oponente.quit();
-		//driverAnonimo.quit();
-		//userDao.deleteAll();
 	}
 
 	private void pausa(long millis) {

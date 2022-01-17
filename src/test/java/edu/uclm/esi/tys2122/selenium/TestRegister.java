@@ -1,6 +1,8 @@
 package edu.uclm.esi.tys2122.selenium;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -49,10 +51,11 @@ public class TestRegister {
 		jugador.findElement(By.id("ui-id-5")).click();
 		pausa(1000);
 		jugador.findElement(By.id("tbUsuario")).clear();
-		jugador.findElement(By.id("tbUsuario")).sendKeys("auto"+ (Math.random() * (99-0)));
+		int r = new Random().nextInt(100);
+		jugador.findElement(By.id("tbUsuario")).sendKeys("auto"+ r);
 		pausa(500);
 		jugador.findElement(By.id("tbEmail")).clear();
-		jugador.findElement(By.id("tbEmail")).sendKeys("autotysweb@yopmail.com");
+		jugador.findElement(By.id("tbEmail")).sendKeys("autotys"+r+"@yopmail.com");
 		pausa(500);
 		jugador.findElement(By.id("tbPasswd")).clear();
 		jugador.findElement(By.id("tbPasswd")).sendKeys("auto");
